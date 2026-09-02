@@ -1,5 +1,231 @@
-import { Heart, Activity, AlertTriangle, ActivitySquare, CheckCircle2, AlertCircle, WifiOff } from 'lucide-react';
+import { 
+  Heart, 
+  Activity, 
+  AlertTriangle, 
+  ActivitySquare, 
+  CheckCircle2, 
+  AlertCircle, 
+  WifiOff, 
+  Pill, 
+  Utensils, 
+  FileText, 
+  Clock, 
+  Coffee, 
+  Sun, 
+  Sunset, 
+  Moon, 
+  Info 
+} from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
+
+// --- MOCK CARE DATA FOR PATIENT VIEW ---
+const MOCK_PRESCRIPTIONS = [
+  {
+    id: 1,
+    name: 'Paracetamol 500 mg',
+    dosage: '1 tablet',
+    frequency: 'Twice a day',
+    timing: 'After breakfast & dinner',
+    duration: '5 days',
+    status: 'Active',
+    prescribedBy: 'Dr. Sarah',
+    prescribedDate: '02 Sep 2026',
+    nextDose: '08:00 PM'
+  },
+  {
+    id: 2,
+    name: 'Amoxicillin 250 mg',
+    dosage: '1 capsule',
+    frequency: 'Three times a day',
+    timing: 'After meals',
+    duration: '7 days',
+    status: 'Active',
+    prescribedBy: 'Dr. Sarah',
+    prescribedDate: '01 Sep 2026',
+    nextDose: '09:00 PM'
+  },
+  {
+    id: 3,
+    name: 'Atorvastatin 10 mg',
+    dosage: '1 tablet',
+    frequency: 'Once daily',
+    timing: 'At bedtime',
+    duration: '30 days',
+    status: 'Completed',
+    prescribedBy: 'Dr. Sarah',
+    prescribedDate: '01 Aug 2026',
+    nextDose: 'N/A'
+  }
+];
+
+const MOCK_DIET_PLAN = {
+  recommendedBy: 'Dr. Sarah',
+  lastUpdated: '02 Sep 2026',
+  meals: [
+    {
+      type: 'Breakfast',
+      time: '08:00 AM - 09:00 AM',
+      items: ['Oatmeal', 'Banana', 'Low-fat milk']
+    },
+    {
+      type: 'Lunch',
+      time: '01:00 PM - 02:00 PM',
+      items: ['Brown rice', 'Dal', 'Vegetable curry', 'Salad']
+    },
+    {
+      type: 'Evening Snack',
+      time: '05:00 PM - 05:30 PM',
+      items: ['Fresh fruit', 'Unsweetened beverage']
+    },
+    {
+      type: 'Dinner',
+      time: '08:00 PM - 09:00 PM',
+      items: ['Chapati', 'Vegetable curry', 'Curd']
+    }
+  ]
+};
+
+const MOCK_DOCTOR_INSTRUCTIONS = {
+  lastUpdated: '02 Sep 2026, 10:30 AM',
+  prescribedBy: 'Dr. Sarah',
+  instructions: [
+    'Take prescribed medication according to the given schedule.',
+    'Follow the recommended daily routine.',
+    'Continue regular health monitoring.',
+    'Maintain adequate rest and hydration.',
+    'Contact your doctor/caregiver if you have concerns.'
+  ],
+  careNotes: 'Continue monitoring regularly and follow the prescribed care plan.'
+};
+
+// --- REUSABLE CARE COMPONENTS ---
+function PrescriptionCard({ rx }) {
+  const isActive = rx.status === 'Active';
+  return (
+    <div className="rx-card">
+      <div className="rx-card-header">
+        <span className="rx-name">{rx.name}</span>
+        <span className={`rx-status-badge ${isActive ? 'active' : 'completed'}`}>
+          {rx.status}
+        </span>
+      </div>
+      <div className="rx-details">
+        <div className="rx-detail-item">
+          <span className="rx-label">Dosage</span>
+          <span className="rx-value">{rx.dosage}</span>
+        </div>
+        <div className="rx-detail-item">
+          <span className="rx-label">Frequency</span>
+          <span className="rx-value">{rx.frequency}</span>
+        </div>
+        <div className="rx-detail-item">
+          <span className="rx-label">Timing</span>
+          <span className="rx-value">{rx.timing}</span>
+        </div>
+        <div className="rx-detail-item">
+          <span className="rx-label">Duration</span>
+          <span className="rx-value">{rx.duration}</span>
+        </div>
+      </div>
+      <div className="rx-footer">
+        <span>Prescribed by {rx.prescribedBy} ({rx.prescribedDate})</span>
+        <span className="rx-next-dose">
+          <Clock size={14} /> Next: {rx.nextDose}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function DietPlan({ diet }) {
+  const getMealIcon = (type) => {
+    switch (type) {
+      case 'Breakfast': return <Coffee size={18} />;
+      case 'Lunch': return <Sun size={18} />;
+      case 'Evening Snack': return <Sunset size={18} />;
+      case 'Dinner': return <Moon size={18} />;
+      default: return <Utensils size={18} />;
+    }
+  };
+
+  return (
+    <section className="care-section-card">
+      <div className="care-section-header">
+        <div className="care-section-title-group">
+          <Utensils size={22} color="var(--primary)" />
+          <h3>MY DIET PLAN</h3>
+        </div>
+        <span className="care-section-badge">
+          Prepared by {diet.recommendedBy} • Updated {diet.lastUpdated}
+        </span>
+      </div>
+      <div className="diet-grid">
+        {diet.meals.map((meal, index) => (
+          <div key={index} className="meal-card">
+            <div className="meal-header">
+              <div className="meal-icon">
+                {getMealIcon(meal.type)}
+              </div>
+              <div>
+                <div className="meal-title">{meal.type}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{meal.time}</div>
+              </div>
+            </div>
+            <ul className="meal-items">
+              {meal.items.map((item, idx) => (
+                <li key={idx} className="meal-item">{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function DoctorInstructions({ data }) {
+  return (
+    <section className="care-section-card">
+      <div className="care-section-header">
+        <div className="care-section-title-group">
+          <FileText size={22} color="var(--primary)" />
+          <h3>DOCTOR'S INSTRUCTIONS & CARE NOTES</h3>
+        </div>
+        <span className="care-section-badge">
+          Last updated: {data.lastUpdated}
+        </span>
+      </div>
+      <div className="instructions-container">
+        <div className="instructions-list-wrapper">
+          <h4>DOCTOR'S INSTRUCTIONS</h4>
+          <ul className="instructions-list">
+            {data.instructions.map((inst, index) => (
+              <li key={index} className="instruction-item">
+                <CheckCircle2 size={18} className="instruction-icon" />
+                <span>{inst}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="care-notes-card">
+          <div>
+            <div className="care-notes-header">
+              <Info size={18} color="var(--primary)" />
+              <span>CARE NOTES</span>
+            </div>
+            <p className="care-notes-content">
+              "{data.careNotes}"
+            </p>
+          </div>
+          <div className="care-notes-footer">
+            <span>Prescribed by: <strong>{data.prescribedBy}</strong></span>
+            <span>Read-Only Patient View</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export default function UserDashboard({ 
   data = { hr: null, gsr: null, panic: 0 }, 
@@ -183,6 +409,31 @@ export default function UserDashboard({
           )}
         </div>
       </section>
+
+      {/* SECTION 4 — MY PRESCRIPTIONS */}
+      <section className="care-section-card">
+        <div className="care-section-header">
+          <div className="care-section-title-group">
+            <Pill size={22} color="var(--primary)" />
+            <h3>MY PRESCRIPTIONS</h3>
+          </div>
+          <span className="care-section-badge">
+            Read-Only • Prescribed by Care Physician
+          </span>
+        </div>
+        <div className="prescriptions-grid">
+          {MOCK_PRESCRIPTIONS.map((rx) => (
+            <PrescriptionCard key={rx.id} rx={rx} />
+          ))}
+        </div>
+      </section>
+
+      {/* SECTION 5 — MY DIET PLAN */}
+      <DietPlan diet={MOCK_DIET_PLAN} />
+
+      {/* SECTION 6 — DOCTOR'S INSTRUCTIONS & CARE NOTES */}
+      <DoctorInstructions data={MOCK_DOCTOR_INSTRUCTIONS} />
     </main>
   );
 }
+
