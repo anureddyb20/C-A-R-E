@@ -213,12 +213,17 @@ async def websocket_endpoint(websocket: WebSocket):
         manager.disconnect(websocket)
 
 frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
-if os.path.exists(frontend_dist):
-    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="static")
-else:
-    @app.get("/")
-    async def root():
-        return RedirectResponse(url="http://localhost:5173")
+assets_dir = os.path.join(frontend_dist, "assets")
+
+if os.path.exists(assets_dir):
+    app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+@app.get("/")
+async def serve_index():
+    index_path = os.path.join(frontend_dist, "index.html")
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return RedirectResponse(url="http://localhost:5173")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
