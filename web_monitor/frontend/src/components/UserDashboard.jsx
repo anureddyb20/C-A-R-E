@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { getCarePlanForPatient, subscribeCarePlan } from '../utils/carePlanStore';
+import { getEmergencyEvents, subscribeEmergencyEvents } from '../utils/emergencyEventStore';
 
 // --- REUSABLE CARE COMPONENTS ---
 function PrescriptionCard({ rx }) {
@@ -168,31 +169,138 @@ function DoctorInstructions({ instructions = [], careNotes = '', lastUpdated = '
   );
 }
 
+function EmergencyHistory({ events = [] }) {
+  return (
+    <section className="care-section-card">
+      <div className="care-section-header">
+        <div className="care-section-title-group">
+          <AlertTriangle size={22} color="var(--alert)" />
+          <h3>EMERGENCY HISTORY</h3>
+        </div>
+        <span className="care-section-badge">
+          Read-Only • Patient History Log
+        </span>
+      </div>
+      {events.length > 0 ? (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+          {events.map((evt) => {
+            const isResolved = evt.status === 'Resolved';
+            const isAck = evt.status === 'Acknowledged';
+            return (
+              <div 
+                key={evt.id} 
+                style={{
+                  backgroundColor: 'var(--bg-page)',
+                  border: '1px solid var(--border-subtle)',
+                  borderRadius: '12px',
+                  padding: '1rem 1.25rem',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
+                  gap: '0.75rem'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                  <div style={{
+                    width: '2.5rem',
+                    height: '2.5rem',
+                    borderRadius: '50%',
+                    backgroundColor: evt.status === 'Active' ? 'rgba(225, 29, 72, 0.12)' : 'var(--surface-ice)',
+                    color: evt.status === 'Active' ? 'var(--alert)' : 'var(--primary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                  }}>
+                    <AlertTriangle size={20} />
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--primary)' }}>
+                      🚨 {evt.eventType}
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.15rem' }}>
+                      {evt.displayTime || evt.timestamp}
+                    </div>
+                    <div style={{ fontSize: '0.875rem', color: 'var(--text-main)', marginTop: '0.25rem' }}>
+                      "{evt.description}"
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <span
+                    style={{
+                      display: 'inline-block',
+                      borderRadius: '9999px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.04em',
+                      backgroundColor: evt.status === 'Active' ? 'rgba(225, 29, 72, 0.12)' : (isAck ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)'),
+                      color: evt.status === 'Active' ? 'var(--alert)' : (isAck ? '#d97706' : '#059669'),
+                      fontSize: '0.75rem',
+                      padding: '0.35rem 0.85rem',
+                      border: evt.status === 'Active' ? '1px solid rgba(225, 29, 72, 0.3)' : (isAck ? '1px solid rgba(245, 158, 11, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)')
+                    }}
+                  >
+                    Status: {evt.status}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', padding: '0.75rem 0' }}>
+          No emergency events recorded.
+        </div>
+      )}
+    </section>
+  );
+}
+
 export default function UserDashboard({ 
+  auth = null,
   data = { hr: null, gsr: null, panic: 0 }, 
   chartData = [], 
   isConnected = false,
   connectionStatus = 'disconnected',
-  hasReceivedData = false,
-  selectedPatientId = 1
+  hasReceivedData = false
 }) {
-  const [activePatientId, setActivePatientId] = useState(selectedPatientId);
-  const [carePlan, setCarePlan] = useState(() => getCarePlanForPatient(activePatientId));
+  const getLoggedPatientId = (authObj) => {
+    if (authObj && authObj.patientId) return Number(authObj.patientId);
+    const storedId = localStorage.getItem('patientId');
+    if (storedId) return Number(storedId);
+    const email = (authObj?.email || localStorage.getItem('email') || '').toLowerCase();
+    if (email.includes('jane')) return 2;
+    if (email.includes('robert')) return 3;
+    return 1;
+  };
+
+  const loggedPatientId = getLoggedPatientId(auth);
+  const [carePlan, setCarePlan] = useState(() => getCarePlanForPatient(loggedPatientId));
+  const [emergencyEvents, setEmergencyEvents] = useState(() => getEmergencyEvents(loggedPatientId));
 
   const isPanic = data.panic === 1 || data.panic === true;
   const isLive = isConnected && hasReceivedData && data.hr !== null;
 
-  // Sync care plan when active patient changes or when store updates
+  // Sync care plan and emergency events when logged patient ID changes or store updates
   useEffect(() => {
-    setCarePlan(getCarePlanForPatient(activePatientId));
-  }, [activePatientId]);
+    setCarePlan(getCarePlanForPatient(loggedPatientId));
+    setEmergencyEvents(getEmergencyEvents(loggedPatientId));
+  }, [loggedPatientId]);
 
   useEffect(() => {
-    const unsubscribe = subscribeCarePlan(() => {
-      setCarePlan(getCarePlanForPatient(activePatientId));
+    const unsubCare = subscribeCarePlan(() => {
+      setCarePlan(getCarePlanForPatient(loggedPatientId));
     });
-    return unsubscribe;
-  }, [activePatientId]);
+    const unsubEmg = subscribeEmergencyEvents(() => {
+      setEmergencyEvents(getEmergencyEvents(loggedPatientId));
+    });
+    return () => {
+      unsubCare();
+      unsubEmg();
+    };
+  }, [loggedPatientId]);
 
   // Determine current monitoring status
   const getMonitoringStatus = () => {
@@ -241,46 +349,27 @@ export default function UserDashboard({
 
   return (
     <main className="dashboard user-dashboard">
-      {/* DEMO PATIENT PROFILE SWITCHER FOR VERIFICATION */}
+      {/* PERSONALIZED PATIENT PROFILE HEADER (NO SELECTOR) */}
       <div style={{
         display: 'flex',
         alignItems: 'center',
-        justify: 'space-between',
+        justifyContent: 'space-between',
         flexWrap: 'wrap',
         gap: '0.75rem',
         backgroundColor: 'var(--surface-card)',
-        padding: '0.75rem 1.25rem',
+        padding: '0.85rem 1.25rem',
         borderRadius: '10px',
         border: '1px solid var(--border-subtle)',
-        fontSize: '0.85rem'
+        fontSize: '0.9rem'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, color: 'var(--primary)' }}>
-          <UserCheck size={18} />
-          <span>Patient Profile: {carePlan.patientName || `Patient #${activePatientId}`}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontWeight: 600, color: 'var(--primary)' }}>
+          <UserCheck size={20} />
+          <span>Patient Account: {carePlan.patientName || `Patient #${loggedPatientId}`}</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>View Care Plan For:</span>
-          <button 
-            className={`doc-btn-sm ${activePatientId === 1 ? 'edit' : ''}`} 
-            onClick={() => setActivePatientId(1)}
-            style={{ fontWeight: activePatientId === 1 ? 700 : 500 }}
-          >
-            John Doe
-          </button>
-          <button 
-            className={`doc-btn-sm ${activePatientId === 2 ? 'edit' : ''}`} 
-            onClick={() => setActivePatientId(2)}
-            style={{ fontWeight: activePatientId === 2 ? 700 : 500 }}
-          >
-            Jane Smith
-          </button>
-          <button 
-            className={`doc-btn-sm ${activePatientId === 3 ? 'edit' : ''}`} 
-            onClick={() => setActivePatientId(3)}
-            style={{ fontWeight: activePatientId === 3 ? 700 : 500 }}
-          >
-            Robert Johnson
-          </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+          <span>Medical ID: <strong>PAT-00{loggedPatientId}</strong></span>
+          <span>•</span>
+          <span>Role: <strong>Patient (Read-Only)</strong></span>
         </div>
       </div>
 
@@ -410,7 +499,10 @@ export default function UserDashboard({
         </div>
       </section>
 
-      {/* SECTION 4 — MY PRESCRIPTIONS */}
+      {/* SECTION 4 — EMERGENCY HISTORY */}
+      <EmergencyHistory events={emergencyEvents} />
+
+      {/* SECTION 5 — MY PRESCRIPTIONS */}
       <section className="care-section-card">
         <div className="care-section-header">
           <div className="care-section-title-group">
@@ -434,10 +526,10 @@ export default function UserDashboard({
         )}
       </section>
 
-      {/* SECTION 5 — MY DIET PLAN */}
+      {/* SECTION 6 — MY DIET PLAN */}
       <DietPlan dietPlan={carePlan.dietPlan} lastUpdated={carePlan.lastUpdated} />
 
-      {/* SECTION 6 — DOCTOR'S INSTRUCTIONS & CARE NOTES */}
+      {/* SECTION 7 — DOCTOR'S INSTRUCTIONS & CARE NOTES */}
       <DoctorInstructions 
         instructions={carePlan.doctorInstructions} 
         careNotes={carePlan.careNotes} 

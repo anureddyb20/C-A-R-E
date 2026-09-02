@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { getCarePlanForPatient, saveCarePlanForPatient, subscribeCarePlan } from '../utils/carePlanStore';
+import { getEmergencyEvents, recordPanicEvent, updateEventStatus, subscribeEmergencyEvents } from '../utils/emergencyEventStore';
 
 export default function DoctorDashboard({ 
   data = { hr: null, gsr: null, panic: 0 }, 
@@ -43,6 +44,7 @@ export default function DoctorDashboard({
   // Modal States
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [showThresholdsModal, setShowThresholdsModal] = useState(false);
+  const [selectedEventDetails, setSelectedEventDetails] = useState(null);
 
   // Care Plan Modals State
   const [showRxModal, setShowRxModal] = useState(false);
@@ -85,8 +87,9 @@ export default function DoctorDashboard({
   const [tempThresholds, setTempThresholds] = useState({ ...thresholds });
   const [sessionLogs, setSessionLogs] = useState([]);
 
-  // Shared Care Plan State for Selected Patient
+  // Shared Care Plan & Emergency Events State for Selected Patient
   const [carePlan, setCarePlan] = useState(() => getCarePlanForPatient(selectedPatient || 1));
+  const [emergencyEvents, setEmergencyEvents] = useState(() => getEmergencyEvents(selectedPatient || 1));
 
   useEffect(() => {
     fetchPatients();
@@ -95,16 +98,25 @@ export default function DoctorDashboard({
   useEffect(() => {
     if (selectedPatient) {
       setCarePlan(getCarePlanForPatient(selectedPatient));
+      setEmergencyEvents(getEmergencyEvents(selectedPatient));
     }
   }, [selectedPatient]);
 
   useEffect(() => {
-    const unsubscribe = subscribeCarePlan(() => {
+    const unsubCare = subscribeCarePlan(() => {
       if (selectedPatient) {
         setCarePlan(getCarePlanForPatient(selectedPatient));
       }
     });
-    return unsubscribe;
+    const unsubEmg = subscribeEmergencyEvents(() => {
+      if (selectedPatient) {
+        setEmergencyEvents(getEmergencyEvents(selectedPatient));
+      }
+    });
+    return () => {
+      unsubCare();
+      unsubEmg();
+    };
   }, [selectedPatient]);
 
   // Reset panic acknowledgment when panic signal resolves
@@ -198,6 +210,35 @@ export default function DoctorDashboard({
   const handleAcknowledgeAlert = () => {
     setAcknowledgedPanic(true);
     showToast("Panic alert acknowledged.");
+  };
+
+  // --- EMERGENCY EVENT HANDLERS ---
+  const handleAcknowledgeEvent = (eventId) => {
+    updateEventStatus(eventId, 'Acknowledged');
+    showToast("Emergency event acknowledged.");
+    if (selectedEventDetails && selectedEventDetails.id === eventId) {
+      setSelectedEventDetails(prev => ({ ...prev, status: 'Acknowledged' }));
+    }
+  };
+
+  const handleResolveEvent = (eventId) => {
+    updateEventStatus(eventId, 'Resolved');
+    showToast("Emergency event resolved.");
+    if (selectedEventDetails && selectedEventDetails.id === eventId) {
+      setSelectedEventDetails(prev => ({ ...prev, status: 'Resolved' }));
+    }
+  };
+
+  const handleTriggerMockPanic = () => {
+    const patientName = selectedPatientData ? selectedPatientData.name : 'John Doe';
+    recordPanicEvent({
+      patientId: selectedPatient || 1,
+      patientName,
+      heartRate: data.hr || Math.floor(Math.random() * 30) + 100,
+      stressValue: data.gsr || Math.floor(Math.random() * 80) + 520,
+      eventType: "Panic Button"
+    });
+    showToast(`Panic event simulated for ${patientName}.`);
   };
 
   // --- CARE PLAN HANDLERS ---
@@ -534,6 +575,133 @@ export default function DoctorDashboard({
               </div>
             </div>
 
+            {/* EMERGENCY EVENTS CARD */}
+            <section className="care-section-card">
+              <div className="care-section-header">
+                <div className="care-section-title-group">
+                  <AlertTriangle size={22} color="var(--alert)" />
+                  <h3>Emergency Events ({selectedPatientData ? selectedPatientData.name : 'Patient'})</h3>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <button className="doc-btn-sm danger" onClick={handleTriggerMockPanic} style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <Plus size={14} /> Simulate Panic Event
+                  </button>
+                  <span className="care-section-badge">
+                    Patient-Specific Log
+                  </span>
+                </div>
+              </div>
+
+              {emergencyEvents && emergencyEvents.length > 0 ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                  {emergencyEvents.map((evt) => {
+                    const isActive = evt.status === 'Active';
+                    const isAck = evt.status === 'Acknowledged';
+                    const isRes = evt.status === 'Resolved';
+
+                    return (
+                      <div 
+                        key={evt.id} 
+                        style={{
+                          backgroundColor: isActive ? 'rgba(225, 29, 72, 0.05)' : 'var(--bg-page)',
+                          border: isActive ? '1px solid rgba(225, 29, 72, 0.4)' : '1px solid var(--border-subtle)',
+                          borderRadius: '12px',
+                          padding: '1.1rem 1.25rem',
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          flexWrap: 'wrap',
+                          gap: '1rem',
+                          boxShadow: isActive ? '0 4px 12px rgba(225, 29, 72, 0.1)' : 'none'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flex: 1, minWidth: '280px' }}>
+                          <div style={{
+                            width: '2.75rem',
+                            height: '2.75rem',
+                            borderRadius: '50%',
+                            backgroundColor: isActive ? 'rgba(225, 29, 72, 0.15)' : (isAck ? 'rgba(245, 158, 11, 0.15)' : 'var(--surface-ice)'),
+                            color: isActive ? 'var(--alert)' : (isAck ? '#d97706' : 'var(--primary)'),
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                          }}>
+                            <AlertTriangle size={22} />
+                          </div>
+                          <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                              <span style={{ fontWeight: 700, fontSize: '1.05rem', color: 'var(--primary)' }}>
+                                {evt.patientName || selectedPatientData?.name}
+                              </span>
+                              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--alert)' }}>
+                                • {evt.eventType}
+                              </span>
+                              <span style={{
+                                borderRadius: '9999px',
+                                fontWeight: 700,
+                                fontSize: '0.7rem',
+                                padding: '0.2rem 0.6rem',
+                                backgroundColor: isActive ? 'rgba(225, 29, 72, 0.15)' : (isAck ? 'rgba(245, 158, 11, 0.15)' : 'rgba(16, 185, 129, 0.15)'),
+                                color: isActive ? 'var(--alert)' : (isAck ? '#d97706' : '#059669'),
+                                border: isActive ? '1px solid rgba(225, 29, 72, 0.3)' : (isAck ? '1px solid rgba(245, 158, 11, 0.3)' : '1px solid rgba(16, 185, 129, 0.3)')
+                              }}>
+                                STATUS: {evt.status.toUpperCase()}
+                              </span>
+                            </div>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
+                              {evt.displayTime || evt.timestamp} &nbsp;|&nbsp; Event ID: {evt.id}
+                            </div>
+                            <div style={{ fontSize: '0.85rem', color: 'var(--text-main)', marginTop: '0.35rem', fontWeight: 500 }}>
+                              "{evt.description}"
+                            </div>
+                            <div style={{ display: 'flex', gap: '1.25rem', marginTop: '0.4rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                              <span>Heart Rate: <strong>{evt.heartRate || '--'} BPM</strong></span>
+                              <span>Stress Index: <strong>{evt.stressValue || '--'}</strong></span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                          <button 
+                            className="doc-btn-sm edit" 
+                            onClick={() => setSelectedEventDetails(evt)}
+                          >
+                            Details
+                          </button>
+                          {isActive && (
+                            <button 
+                              className="save-notes-btn" 
+                              style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', backgroundColor: '#f59e0b' }} 
+                              onClick={() => handleAcknowledgeEvent(evt.id)}
+                            >
+                              Acknowledge
+                            </button>
+                          )}
+                          {isAck && (
+                            <button 
+                              className="save-notes-btn" 
+                              style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', backgroundColor: '#10b981' }} 
+                              onClick={() => handleResolveEvent(evt.id)}
+                            >
+                              Resolve
+                            </button>
+                          )}
+                          {isRes && (
+                            <span style={{ fontSize: '0.8rem', color: '#059669', fontWeight: 600, padding: '0.4rem' }}>
+                              ✓ Resolved
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="care-plan-empty">No emergency events for this patient.</div>
+              )}
+            </section>
+
             {/* A. PRESCRIPTIONS CARD */}
             <section className="care-section-card">
               <div className="care-section-header">
@@ -675,6 +843,69 @@ export default function DoctorDashboard({
           </div>
         )}
       </main>
+
+      {/* EMERGENCY EVENT DETAILS MODAL */}
+      {selectedEventDetails && (
+        <div className="modal-overlay" onClick={() => setSelectedEventDetails(null)}>
+          <div className="modal-card" style={{ maxWidth: '520px', width: '100%', padding: '1.5rem' }} onClick={e => e.stopPropagation()}>
+            <div className="modal-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <AlertTriangle size={22} color="var(--alert)" />
+                <h3 style={{ margin: 0 }}>Emergency Event Details</h3>
+              </div>
+              <button className="modal-close-btn" style={{ background: 'none', border: 'none', cursor: 'pointer' }} onClick={() => setSelectedEventDetails(null)}>
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.9rem' }}>
+              <div><strong>Patient Name:</strong> {selectedEventDetails.patientName}</div>
+              <div><strong>Event ID:</strong> {selectedEventDetails.id}</div>
+              <div><strong>Event Type:</strong> {selectedEventDetails.eventType}</div>
+              <div><strong>Date & Time:</strong> {selectedEventDetails.displayTime || selectedEventDetails.timestamp}</div>
+              <div><strong>Heart Rate at Event:</strong> {selectedEventDetails.heartRate ? `${selectedEventDetails.heartRate} BPM` : '--'}</div>
+              <div><strong>Stress Index at Event:</strong> {selectedEventDetails.stressValue || '--'}</div>
+              <div>
+                <strong>Current Status:</strong>{' '}
+                <span style={{ 
+                  fontWeight: 700, 
+                  color: selectedEventDetails.status === 'Active' ? 'var(--alert)' : (selectedEventDetails.status === 'Acknowledged' ? '#d97706' : '#059669') 
+                }}>
+                  {selectedEventDetails.status}
+                </span>
+              </div>
+              <div style={{ backgroundColor: 'var(--bg-page)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+                <strong>Description:</strong>
+                <p style={{ margin: '0.25rem 0 0 0', color: 'var(--text-main)' }}>{selectedEventDetails.description}</p>
+              </div>
+            </div>
+
+            <div className="modal-actions" style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
+              <button type="button" className="btn-cancel" style={{ padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid var(--border-subtle)', cursor: 'pointer' }} onClick={() => setSelectedEventDetails(null)}>
+                Close
+              </button>
+              {selectedEventDetails.status === 'Active' && (
+                <button 
+                  className="save-notes-btn" 
+                  style={{ backgroundColor: '#f59e0b' }} 
+                  onClick={() => handleAcknowledgeEvent(selectedEventDetails.id)}
+                >
+                  Acknowledge Event
+                </button>
+              )}
+              {selectedEventDetails.status === 'Acknowledged' && (
+                <button 
+                  className="save-notes-btn" 
+                  style={{ backgroundColor: '#10b981' }} 
+                  onClick={() => handleResolveEvent(selectedEventDetails.id)}
+                >
+                  Resolve Event
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ADD / EDIT PRESCRIPTION MODAL */}
       {showRxModal && (
@@ -1102,4 +1333,5 @@ export default function DoctorDashboard({
     </div>
   );
 }
+
 
