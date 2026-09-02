@@ -9,7 +9,7 @@ import { useECGData } from './hooks/useECGData';
 import './index.css';
 
 function DashboardRouter({ auth, setAuth }) {
-  const { data, chartData, isConnected } = useECGData();
+  const { data, chartData, isConnected, connectionStatus, hasReceivedData } = useECGData();
   const navigate = useNavigate();
 
   return (
@@ -18,13 +18,20 @@ function DashboardRouter({ auth, setAuth }) {
         auth={auth} 
         setAuth={setAuth} 
         isConnected={isConnected} 
+        connectionStatus={connectionStatus}
         navigate={navigate} 
       />
       
       {auth.role === 'Admin' && <AdminDashboard isConnected={isConnected} />}
       {auth.role === 'Doctor' && <DoctorDashboard data={data} chartData={chartData} />}
       {(auth.role === 'User' || !['Admin', 'Doctor'].includes(auth.role)) && (
-        <UserDashboard data={data} chartData={chartData} />
+        <UserDashboard 
+          data={data} 
+          chartData={chartData} 
+          isConnected={isConnected}
+          connectionStatus={connectionStatus}
+          hasReceivedData={hasReceivedData}
+        />
       )}
     </div>
   );

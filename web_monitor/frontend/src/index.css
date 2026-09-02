@@ -83,8 +83,18 @@ body {
   background-color: var(--success);
   box-shadow: 0 0 8px var(--success);
 }
+.status-dot.connecting {
+  background-color: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+  animation: blink 1.2s infinite;
+}
 .status-dot.disconnected {
   background-color: var(--alert);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 /* Main Dashboard */
@@ -93,16 +103,138 @@ body {
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
   width: 100%;
 }
 
+/* Panic Alert Banner */
+.panic-banner {
+  background: linear-gradient(135deg, #e11d48, #9f1239);
+  color: white;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(225, 29, 72, 0.6);
+  animation: panicPulse 1.2s infinite alternate ease-in-out;
+  border: 2px solid #fda4af;
+}
+
+.panic-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.panic-icon {
+  flex-shrink: 0;
+  animation: shake 0.8s infinite;
+}
+
+.panic-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.panic-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  margin-top: 0.15rem;
+}
+
+@keyframes panicPulse {
+  from { box-shadow: 0 0 15px rgba(225, 29, 72, 0.4); }
+  to { box-shadow: 0 0 35px rgba(225, 29, 72, 0.9); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+/* Current Health Status Card */
+.health-status-card {
+  background-color: var(--surface);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.health-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.status-title-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.health-status-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  display: block;
+}
+
+.health-status-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  line-height: 1.2;
+}
+
+.status-icon.stable { color: var(--success); }
+.status-icon.attention { color: #f59e0b; }
+.status-icon.emergency { color: var(--alert); }
+.status-icon.offline { color: var(--text-muted); }
+
+.health-status-card.status-stable {
+  border-left: 4px solid var(--success);
+}
+.health-status-card.status-attention {
+  border-left: 4px solid #f59e0b;
+  background-color: rgba(245, 158, 11, 0.05);
+}
+.health-status-card.status-emergency {
+  border-left: 4px solid var(--alert);
+  background-color: rgba(225, 29, 72, 0.1);
+}
+.health-status-card.status-offline {
+  border-left: 4px solid var(--text-muted);
+}
+
+.health-status-description {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.monitoring-tag {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 /* Stats Row */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
@@ -118,20 +250,25 @@ body {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.stat-card.card-panic {
+  border-color: rgba(225, 29, 72, 0.4);
+}
+
 .stat-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .stat-icon {
-  width: 3rem;
-  height: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: rgba(45, 212, 191, 0.1);
   color: var(--accent);
+  flex-shrink: 0;
 }
 
 .stat-icon.alert {
@@ -139,24 +276,61 @@ body {
   color: var(--alert);
 }
 
+.pulse-heart {
+  animation: heartBeat 1.5s infinite;
+}
+
+@keyframes heartBeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.15); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.15); }
+  70% { transform: scale(1); }
+}
+
 .stat-info {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .stat-label {
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 600;
+  letter-spacing: 0.08em;
+  font-weight: 700;
   margin-bottom: 0.25rem;
 }
 
+.stat-value-container {
+  display: flex;
+  align-items: baseline;
+}
+
 .stat-value {
-  font-size: 2.5rem;
-  font-weight: 700;
-  line-height: 1;
+  font-size: 2.75rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text-light);
+}
+
+.stat-value.stat-muted {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.stat-unit {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-left: 0.25rem;
+}
+
+.stat-subtext {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
 }
 
 /* Chart Area */
@@ -167,7 +341,7 @@ body {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.05);
   flex: 1;
-  min-height: 400px;
+  min-height: 380px;
   display: flex;
   flex-direction: column;
 }
@@ -176,40 +350,106 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .chart-title {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.15rem;
+  font-weight: 700;
   color: var(--text-light);
   display: flex;
   align-items: center;
+  gap: 0.6rem;
+}
+
+.chart-badge {
+  display: flex;
+  align-items: center;
   gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
 }
 
 .chart-wrapper {
   flex: 1;
   width: 100%;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Panic Alert Overlay */
-.panic-banner {
-  background-color: var(--alert);
-  color: white;
-  padding: 1rem;
+.chart-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
   text-align: center;
-  font-size: 1.5rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  animation: pulse 1s infinite alternate;
-  border-radius: 12px;
-  margin-bottom: 1rem;
+  color: var(--text-muted);
 }
 
-@keyframes pulse {
-  from { opacity: 1; box-shadow: 0 0 10px var(--alert); }
+.placeholder-icon {
+  color: var(--surface-light);
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.placeholder-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 0.35rem;
+}
+
+.placeholder-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  max-width: 400px;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .header {
+    padding: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .header > div {
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .stat-card {
+    padding: 1.25rem;
+  }
+  .stat-value {
+    font-size: 2.25rem;
+  }
+  .health-status-card {
+    padding: 1rem 1.25rem;
+  }
+  .panic-banner {
+    padding: 1rem;
+  }
+  .panic-title {
+    font-size: 1.1rem;
+  }
+  .panic-subtitle {
+    font-size: 0.85rem;
+  }
 }
 
 /* Login specific styles */
