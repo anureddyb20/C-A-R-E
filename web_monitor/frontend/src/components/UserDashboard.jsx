@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { 
   Heart, 
   Activity, 
@@ -14,130 +15,60 @@ import {
   Sun, 
   Sunset, 
   Moon, 
-  Info 
+  Info,
+  UserCheck 
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
-
-// --- MOCK CARE DATA FOR PATIENT VIEW ---
-const MOCK_PRESCRIPTIONS = [
-  {
-    id: 1,
-    name: 'Paracetamol 500 mg',
-    dosage: '1 tablet',
-    frequency: 'Twice a day',
-    timing: 'After breakfast & dinner',
-    duration: '5 days',
-    status: 'Active',
-    prescribedBy: 'Dr. Sarah',
-    prescribedDate: '02 Sep 2026',
-    nextDose: '08:00 PM'
-  },
-  {
-    id: 2,
-    name: 'Amoxicillin 250 mg',
-    dosage: '1 capsule',
-    frequency: 'Three times a day',
-    timing: 'After meals',
-    duration: '7 days',
-    status: 'Active',
-    prescribedBy: 'Dr. Sarah',
-    prescribedDate: '01 Sep 2026',
-    nextDose: '09:00 PM'
-  },
-  {
-    id: 3,
-    name: 'Atorvastatin 10 mg',
-    dosage: '1 tablet',
-    frequency: 'Once daily',
-    timing: 'At bedtime',
-    duration: '30 days',
-    status: 'Completed',
-    prescribedBy: 'Dr. Sarah',
-    prescribedDate: '01 Aug 2026',
-    nextDose: 'N/A'
-  }
-];
-
-const MOCK_DIET_PLAN = {
-  recommendedBy: 'Dr. Sarah',
-  lastUpdated: '02 Sep 2026',
-  meals: [
-    {
-      type: 'Breakfast',
-      time: '08:00 AM - 09:00 AM',
-      items: ['Oatmeal', 'Banana', 'Low-fat milk']
-    },
-    {
-      type: 'Lunch',
-      time: '01:00 PM - 02:00 PM',
-      items: ['Brown rice', 'Dal', 'Vegetable curry', 'Salad']
-    },
-    {
-      type: 'Evening Snack',
-      time: '05:00 PM - 05:30 PM',
-      items: ['Fresh fruit', 'Unsweetened beverage']
-    },
-    {
-      type: 'Dinner',
-      time: '08:00 PM - 09:00 PM',
-      items: ['Chapati', 'Vegetable curry', 'Curd']
-    }
-  ]
-};
-
-const MOCK_DOCTOR_INSTRUCTIONS = {
-  lastUpdated: '02 Sep 2026, 10:30 AM',
-  prescribedBy: 'Dr. Sarah',
-  instructions: [
-    'Take prescribed medication according to the given schedule.',
-    'Follow the recommended daily routine.',
-    'Continue regular health monitoring.',
-    'Maintain adequate rest and hydration.',
-    'Contact your doctor/caregiver if you have concerns.'
-  ],
-  careNotes: 'Continue monitoring regularly and follow the prescribed care plan.'
-};
+import { getCarePlanForPatient, subscribeCarePlan } from '../utils/carePlanStore';
 
 // --- REUSABLE CARE COMPONENTS ---
 function PrescriptionCard({ rx }) {
   const isActive = rx.status === 'Active';
+  const name = rx.medicineName || rx.name || 'Medication';
   return (
     <div className="rx-card">
       <div className="rx-card-header">
-        <span className="rx-name">{rx.name}</span>
+        <span className="rx-name">{name}</span>
         <span className={`rx-status-badge ${isActive ? 'active' : 'completed'}`}>
-          {rx.status}
+          {rx.status || 'Active'}
         </span>
       </div>
       <div className="rx-details">
         <div className="rx-detail-item">
           <span className="rx-label">Dosage</span>
-          <span className="rx-value">{rx.dosage}</span>
+          <span className="rx-value">{rx.dosage || '--'}</span>
         </div>
         <div className="rx-detail-item">
           <span className="rx-label">Frequency</span>
-          <span className="rx-value">{rx.frequency}</span>
+          <span className="rx-value">{rx.frequency || '--'}</span>
         </div>
         <div className="rx-detail-item">
           <span className="rx-label">Timing</span>
-          <span className="rx-value">{rx.timing}</span>
+          <span className="rx-value">{rx.timing || '--'}</span>
         </div>
         <div className="rx-detail-item">
           <span className="rx-label">Duration</span>
-          <span className="rx-value">{rx.duration}</span>
+          <span className="rx-value">{rx.duration || '--'}</span>
         </div>
       </div>
       <div className="rx-footer">
-        <span>Prescribed by {rx.prescribedBy} ({rx.prescribedDate})</span>
+        <span>Prescribed by {rx.prescribedBy || 'Dr. Sarah'} ({rx.prescribedDate || 'Recent'})</span>
         <span className="rx-next-dose">
-          <Clock size={14} /> Next: {rx.nextDose}
+          <Clock size={14} /> Next: {rx.nextDose || 'Scheduled'}
         </span>
       </div>
     </div>
   );
 }
 
-function DietPlan({ diet }) {
+function DietPlan({ dietPlan, lastUpdated }) {
+  const meals = [
+    { type: 'Breakfast', time: '08:00 AM - 09:00 AM', items: dietPlan?.breakfast || [] },
+    { type: 'Lunch', time: '01:00 PM - 02:00 PM', items: dietPlan?.lunch || [] },
+    { type: 'Evening Snack', time: '05:00 PM - 05:30 PM', items: dietPlan?.eveningSnack || [] },
+    { type: 'Dinner', time: '08:00 PM - 09:00 PM', items: dietPlan?.dinner || [] }
+  ];
+
   const getMealIcon = (type) => {
     switch (type) {
       case 'Breakfast': return <Coffee size={18} />;
@@ -156,11 +87,11 @@ function DietPlan({ diet }) {
           <h3>MY DIET PLAN</h3>
         </div>
         <span className="care-section-badge">
-          Prepared by {diet.recommendedBy} • Updated {diet.lastUpdated}
+          Prepared by Dr. Sarah • Updated {lastUpdated || 'Recently'}
         </span>
       </div>
       <div className="diet-grid">
-        {diet.meals.map((meal, index) => (
+        {meals.map((meal, index) => (
           <div key={index} className="meal-card">
             <div className="meal-header">
               <div className="meal-icon">
@@ -172,9 +103,13 @@ function DietPlan({ diet }) {
               </div>
             </div>
             <ul className="meal-items">
-              {meal.items.map((item, idx) => (
-                <li key={idx} className="meal-item">{item}</li>
-              ))}
+              {meal.items.length > 0 ? (
+                meal.items.map((item, idx) => (
+                  <li key={idx} className="meal-item">{item}</li>
+                ))
+              ) : (
+                <li className="meal-item" style={{ fontStyle: 'italic', opacity: 0.6 }}>No specific items</li>
+              )}
             </ul>
           </div>
         ))}
@@ -183,7 +118,7 @@ function DietPlan({ diet }) {
   );
 }
 
-function DoctorInstructions({ data }) {
+function DoctorInstructions({ instructions = [], careNotes = '', lastUpdated = '' }) {
   return (
     <section className="care-section-card">
       <div className="care-section-header">
@@ -192,20 +127,26 @@ function DoctorInstructions({ data }) {
           <h3>DOCTOR'S INSTRUCTIONS & CARE NOTES</h3>
         </div>
         <span className="care-section-badge">
-          Last updated: {data.lastUpdated}
+          Last updated: {lastUpdated || 'Recently'}
         </span>
       </div>
       <div className="instructions-container">
         <div className="instructions-list-wrapper">
           <h4>DOCTOR'S INSTRUCTIONS</h4>
-          <ul className="instructions-list">
-            {data.instructions.map((inst, index) => (
-              <li key={index} className="instruction-item">
-                <CheckCircle2 size={18} className="instruction-icon" />
-                <span>{inst}</span>
-              </li>
-            ))}
-          </ul>
+          {instructions.length > 0 ? (
+            <ul className="instructions-list">
+              {instructions.map((inst, index) => (
+                <li key={index} className="instruction-item">
+                  <CheckCircle2 size={18} className="instruction-icon" />
+                  <span>{inst}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+              No general instructions listed at this time.
+            </p>
+          )}
         </div>
         <div className="care-notes-card">
           <div>
@@ -214,11 +155,11 @@ function DoctorInstructions({ data }) {
               <span>CARE NOTES</span>
             </div>
             <p className="care-notes-content">
-              "{data.careNotes}"
+              {careNotes ? `"${careNotes}"` : 'No additional care notes recorded.'}
             </p>
           </div>
           <div className="care-notes-footer">
-            <span>Prescribed by: <strong>{data.prescribedBy}</strong></span>
+            <span>Prescribed by: <strong>Dr. Sarah</strong></span>
             <span>Read-Only Patient View</span>
           </div>
         </div>
@@ -232,10 +173,26 @@ export default function UserDashboard({
   chartData = [], 
   isConnected = false,
   connectionStatus = 'disconnected',
-  hasReceivedData = false
+  hasReceivedData = false,
+  selectedPatientId = 1
 }) {
+  const [activePatientId, setActivePatientId] = useState(selectedPatientId);
+  const [carePlan, setCarePlan] = useState(() => getCarePlanForPatient(activePatientId));
+
   const isPanic = data.panic === 1 || data.panic === true;
   const isLive = isConnected && hasReceivedData && data.hr !== null;
+
+  // Sync care plan when active patient changes or when store updates
+  useEffect(() => {
+    setCarePlan(getCarePlanForPatient(activePatientId));
+  }, [activePatientId]);
+
+  useEffect(() => {
+    const unsubscribe = subscribeCarePlan(() => {
+      setCarePlan(getCarePlanForPatient(activePatientId));
+    });
+    return unsubscribe;
+  }, [activePatientId]);
 
   // Determine current monitoring status
   const getMonitoringStatus = () => {
@@ -284,6 +241,49 @@ export default function UserDashboard({
 
   return (
     <main className="dashboard user-dashboard">
+      {/* DEMO PATIENT PROFILE SWITCHER FOR VERIFICATION */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justify: 'space-between',
+        flexWrap: 'wrap',
+        gap: '0.75rem',
+        backgroundColor: 'var(--surface-card)',
+        padding: '0.75rem 1.25rem',
+        borderRadius: '10px',
+        border: '1px solid var(--border-subtle)',
+        fontSize: '0.85rem'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 600, color: 'var(--primary)' }}>
+          <UserCheck size={18} />
+          <span>Patient Profile: {carePlan.patientName || `Patient #${activePatientId}`}</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>View Care Plan For:</span>
+          <button 
+            className={`doc-btn-sm ${activePatientId === 1 ? 'edit' : ''}`} 
+            onClick={() => setActivePatientId(1)}
+            style={{ fontWeight: activePatientId === 1 ? 700 : 500 }}
+          >
+            John Doe
+          </button>
+          <button 
+            className={`doc-btn-sm ${activePatientId === 2 ? 'edit' : ''}`} 
+            onClick={() => setActivePatientId(2)}
+            style={{ fontWeight: activePatientId === 2 ? 700 : 500 }}
+          >
+            Jane Smith
+          </button>
+          <button 
+            className={`doc-btn-sm ${activePatientId === 3 ? 'edit' : ''}`} 
+            onClick={() => setActivePatientId(3)}
+            style={{ fontWeight: activePatientId === 3 ? 700 : 500 }}
+          >
+            Robert Johnson
+          </button>
+        </div>
+      </div>
+
       {/* SECTION 6 — EMERGENCY / PANIC ALERT BANNER */}
       {isPanic && (
         <section className="panic-banner" role="alert" aria-live="assertive">
@@ -367,7 +367,7 @@ export default function UserDashboard({
           <div className="chart-title">
             <ActivitySquare 
               size={22} 
-              color={isPanic ? 'var(--alert)' : 'var(--accent)'} 
+              color={isPanic ? '#E11D48' : '#0EA5E9'} 
             />
             <span>Live ECG Waveform</span>
           </div>
@@ -418,22 +418,31 @@ export default function UserDashboard({
             <h3>MY PRESCRIPTIONS</h3>
           </div>
           <span className="care-section-badge">
-            Read-Only • Prescribed by Care Physician
+            Read-Only • Prescribed by Dr. Sarah
           </span>
         </div>
-        <div className="prescriptions-grid">
-          {MOCK_PRESCRIPTIONS.map((rx) => (
-            <PrescriptionCard key={rx.id} rx={rx} />
-          ))}
-        </div>
+        {carePlan.prescriptions && carePlan.prescriptions.length > 0 ? (
+          <div className="prescriptions-grid">
+            {carePlan.prescriptions.map((rx) => (
+              <PrescriptionCard key={rx.id} rx={rx} />
+            ))}
+          </div>
+        ) : (
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontStyle: 'italic', padding: '0.5rem 0' }}>
+            No active prescriptions on file.
+          </p>
+        )}
       </section>
 
       {/* SECTION 5 — MY DIET PLAN */}
-      <DietPlan diet={MOCK_DIET_PLAN} />
+      <DietPlan dietPlan={carePlan.dietPlan} lastUpdated={carePlan.lastUpdated} />
 
       {/* SECTION 6 — DOCTOR'S INSTRUCTIONS & CARE NOTES */}
-      <DoctorInstructions data={MOCK_DOCTOR_INSTRUCTIONS} />
+      <DoctorInstructions 
+        instructions={carePlan.doctorInstructions} 
+        careNotes={carePlan.careNotes} 
+        lastUpdated={carePlan.lastUpdated} 
+      />
     </main>
   );
 }
-

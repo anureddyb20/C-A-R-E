@@ -1999,11 +1999,298 @@ select.threshold-input option {
   border: 1px solid var(--border-subtle);
 }
 
-.care-notes-footer {
-  font-size: 0.8rem;
+/* Doctor Dashboard Care Plan Management */
+.care-plan-editor-section {
+  background-color: var(--surface-card);
+  border-radius: 14px;
+  padding: 1.5rem;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.care-plan-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 1rem;
+}
+
+.care-plan-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.care-plan-last-updated {
+  font-size: 0.85rem;
   color: var(--text-muted);
+}
+
+.care-plan-block {
+  background-color: var(--bg-page);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.care-plan-block-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
+.care-plan-block-header h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.care-plan-action-btn {
+  background-color: white;
+  border: 1px solid var(--border-subtle);
+  color: var(--primary);
+  padding: 0.4rem 0.85rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s ease;
+}
+
+.care-plan-action-btn:hover {
+  background-color: var(--surface-ice);
+  border-color: var(--primary-light);
+}
+
+.care-plan-action-btn.primary {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.care-plan-action-btn.primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.doc-rx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.doc-rx-card {
+  background-color: white;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.doc-rx-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.doc-rx-name {
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 0.95rem;
+}
+
+.doc-rx-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.doc-rx-badge.active {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.doc-rx-badge.completed {
+  background-color: rgba(100, 116, 139, 0.12);
+  color: var(--text-muted);
+}
+
+.doc-rx-body {
+  font-size: 0.825rem;
+  color: var(--text-main);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 0.75rem;
+}
+
+.doc-rx-actions {
+  display: flex;
+  gap: 0.5rem;
+  border-top: 1px dashed var(--border-subtle);
+  padding-top: 0.5rem;
+  justify-content: flex-end;
+}
+
+.doc-btn-sm {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.doc-btn-sm.edit {
+  color: var(--primary);
+}
+
+.doc-btn-sm.edit:hover {
+  background-color: var(--surface-ice);
+}
+
+.doc-btn-sm.danger {
+  color: var(--alert);
+  border-color: rgba(225, 29, 72, 0.2);
+}
+
+.doc-btn-sm.danger:hover {
+  background-color: rgba(225, 29, 72, 0.08);
+}
+
+.doc-diet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.doc-diet-col {
+  background-color: white;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.doc-diet-col h5 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.doc-diet-col ul {
+  list-style: none;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.doc-diet-col ul li::before {
+  content: "•";
+  color: var(--accent-cyan);
+  margin-right: 0.4rem;
+}
+
+.doc-instructions-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.doc-instruction-item {
+  background-color: white;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.doc-notes-box {
+  background-color: white;
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 1rem;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.care-plan-empty {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 0.5rem 0;
+}
+
+.care-plan-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.care-plan-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.care-plan-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.care-plan-field label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.care-plan-field input,
+.care-plan-field select,
+.care-plan-field textarea {
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  font-size: 0.9rem;
+  font-family: inherit;
+}
+
+.care-plan-field input:focus,
+.care-plan-field select:focus,
+.care-plan-field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
 
