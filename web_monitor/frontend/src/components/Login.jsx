@@ -13,7 +13,7 @@ export default function Login({ setAuth }) {
     setError('');
     try {
       const formBody = new URLSearchParams({ username, password });
-      const response = await fetch('http://localhost:8000/token', {
+      const response = await fetch('/token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: formBody.toString()

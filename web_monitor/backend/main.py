@@ -12,7 +12,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt
 from datetime import datetime, timedelta, timezone
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List
+from typing import List, Optional
 from contextlib import asynccontextmanager
 import uvicorn
 
@@ -72,7 +72,7 @@ class PatientCreate(BaseModel):
     room: str
     status: str = "Observation"
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(timezone.utc) + expires_delta
@@ -221,12 +221,19 @@ assets_dir = os.path.join(frontend_dist, "assets")
 if os.path.exists(assets_dir):
     app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
-@app.get("/")
-async def serve_index():
+@app.get("/{full_path:path}")
+async def serve_spa(full_path: str):
+    file_path = os.path.join(frontend_dist, full_path)
+    if full_path and os.path.isfile(file_path):
+        return FileResponse(file_path)
     index_path = os.path.join(frontend_dist, "index.html")
     if os.path.exists(index_path):
         return FileResponse(index_path)
-    return RedirectResponse(url="http://localhost:5173")
+    return {
+        "status": "online",
+        "message": "Backend API is running. Frontend build not found. Run 'npm run build' in web_monitor/frontend to serve frontend on this port.",
+        "docs": "/docs"
+    }
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)

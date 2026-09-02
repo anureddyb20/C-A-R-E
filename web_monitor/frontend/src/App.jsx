@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import LandingPage from './components/LandingPage';
 import Login from './components/Login';
 import SharedHeader from './components/SharedHeader';
 import UserDashboard from './components/UserDashboard';
@@ -45,6 +46,16 @@ function DashboardRouter({ auth, setAuth }) {
   );
 }
 
+function MainLayout({ auth, setAuth, children }) {
+  const navigate = useNavigate();
+  return (
+    <div className="app-container">
+      <SharedHeader auth={auth} setAuth={setAuth} navigate={navigate} />
+      {children}
+    </div>
+  );
+}
+
 function App() {
   const [auth, setAuth] = useState(() => {
     const token = localStorage.getItem('token');
@@ -56,10 +67,26 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={
-          auth ? <Navigate to="/" /> : <Login setAuth={setAuth} />
-        } />
         <Route path="/" element={
+          auth ? <DashboardRouter auth={auth} setAuth={setAuth} /> : (
+            <MainLayout auth={auth} setAuth={setAuth}>
+              <LandingPage />
+            </MainLayout>
+          )
+        } />
+        <Route path="/landing" element={
+          <MainLayout auth={auth} setAuth={setAuth}>
+            <LandingPage />
+          </MainLayout>
+        } />
+        <Route path="/login" element={
+          auth ? <Navigate to="/dashboard" /> : (
+            <MainLayout auth={auth} setAuth={setAuth}>
+              <Login setAuth={setAuth} />
+            </MainLayout>
+          )
+        } />
+        <Route path="/dashboard" element={
           auth ? <DashboardRouter auth={auth} setAuth={setAuth} /> : <Navigate to="/login" />
         } />
       </Routes>

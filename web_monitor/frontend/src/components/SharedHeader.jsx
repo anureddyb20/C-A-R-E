@@ -1,4 +1,4 @@
-import { ActivitySquare, LogOut, User as UserIcon } from 'lucide-react';
+import { ActivitySquare, LogOut, User as UserIcon, LogIn } from 'lucide-react';
 
 export default function SharedHeader({ auth, setAuth, isConnected, connectionStatus = isConnected ? 'connected' : 'disconnected', navigate }) {
   const handleLogout = () => {
@@ -6,49 +6,56 @@ export default function SharedHeader({ auth, setAuth, isConnected, connectionSta
     localStorage.removeItem('role');
     localStorage.removeItem('email');
     setAuth(null);
-    navigate('/login');
+    if (navigate) navigate('/');
   };
 
   const getStatusDisplay = () => {
     if (connectionStatus === 'connected') {
-      return {
-        className: 'connected',
-        label: 'Live Data'
-      };
+      return { className: 'connected', label: 'Live Data' };
     }
     if (connectionStatus === 'connecting') {
-      return {
-        className: 'connecting',
-        label: 'Connecting...'
-      };
+      return { className: 'connecting', label: 'Connecting...' };
     }
-    return {
-      className: 'disconnected',
-      label: 'Offline'
-    };
+    return { className: 'disconnected', label: 'Offline' };
   };
 
   const status = getStatusDisplay();
 
   return (
     <header className="header">
-      <h1>
-        <ActivitySquare size={28} />
-        C.A.R.E. Web Monitor
+      <h1 onClick={() => navigate && navigate('/')} style={{ cursor: 'pointer' }}>
+        <ActivitySquare size={28} color="var(--primary)" />
+        <span style={{ color: 'var(--primary)', fontWeight: 800 }}>C.A.R.E.</span>
       </h1>
+
+      <ul className="header-nav-links">
+        <li className="header-nav-link" onClick={() => navigate && navigate('/')}>Accueil</li>
+        <li className="header-nav-link" onClick={() => navigate && navigate('/landing#about')}>À propos</li>
+        <li className="header-nav-link" onClick={() => navigate && navigate('/landing#services')}>Services</li>
+        <li className="header-nav-link" onClick={() => navigate && navigate('/landing#news')}>Communiqués</li>
+      </ul>
       
-      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-        <div className="role-badge">
-          <UserIcon size={16} />
-          {auth.role}
-        </div>
+      <div className="header-right">
         <div className="status-badge">
           <div className={`status-dot ${status.className}`}></div>
           {status.label}
         </div>
-        <button className="logout-btn" onClick={handleLogout}>
-          <LogOut size={16} /> Logout
-        </button>
+
+        {auth ? (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', fontWeight: 600, color: 'var(--primary)', backgroundColor: 'var(--surface-ice)', padding: '0.35rem 0.85rem', borderRadius: '9999px' }}>
+              <UserIcon size={15} />
+              {auth.role}
+            </div>
+            <button className="btn-pill btn-pill-outline" onClick={handleLogout} style={{ padding: '0.4rem 1.1rem', fontSize: '0.85rem' }}>
+              <LogOut size={15} /> Déconnexion
+            </button>
+          </>
+        ) : (
+          <button className="btn-pill btn-pill-navy" onClick={() => navigate && navigate('/login')} style={{ padding: '0.45rem 1.25rem', fontSize: '0.85rem' }}>
+            <LogIn size={15} /> Connexion
+          </button>
+        )}
       </div>
     </header>
   );
