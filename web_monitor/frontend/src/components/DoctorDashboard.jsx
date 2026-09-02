@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
-import { Heart, Activity, AlertTriangle, ActivitySquare, Users, FileText, Settings, User as UserIcon, CheckCircle, Plus, X, Sliders, History, Info, Clock } from 'lucide-react';
+import { Heart, Activity, AlertTriangle, ActivitySquare, Users, FileText, Settings, User as UserIcon, CheckCircle, Plus, X, Sliders, History, Info, Clock, Wifi, WifiOff } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 
-export default function DoctorDashboard({ data, chartData }) {
+export default function DoctorDashboard({ 
+  data = { hr: null, gsr: null, panic: 0 }, 
+  chartData = [], 
+  isConnected = false, 
+  connectionStatus = 'disconnected',
+  hasReceivedData = false 
+}) {
   const [patients, setPatients] = useState([]);
   const [selectedPatient, setSelectedPatient] = useState(null);
   
@@ -128,9 +134,10 @@ export default function DoctorDashboard({ data, chartData }) {
     showToast("Panic alert acknowledged.");
   };
 
+  const isLiveSignal = isConnected && hasReceivedData;
   const isPanic = data.panic === 1;
-  const isHrAlert = data.hr !== null && (data.hr < thresholds.hrMin || data.hr > thresholds.hrMax);
-  const isStressAlert = data.gsr !== null && data.gsr > thresholds.stressMax;
+  const isHrAlert = isLiveSignal && data.hr !== null && (data.hr < thresholds.hrMin || data.hr > thresholds.hrMax);
+  const isStressAlert = isLiveSignal && data.gsr !== null && data.gsr > thresholds.stressMax;
   const isSelectedAlert = (isPanic && thresholds.panicAlertEnabled) || isHrAlert || isStressAlert;
 
   const displayPatients = patients.map(p => {
@@ -166,7 +173,16 @@ export default function DoctorDashboard({ data, chartData }) {
               onClick={() => setSelectedPatient(p.id)}
             >
               <div className="patient-name">{p.name} <span className="patient-room">Rm {p.room}</span></div>
-              <div className={`patient-status ${p.status.toLowerCase()}`}>{p.status}</div>
+              <div className="patient-card-row">
+                <span className={`patient-status ${p.status.toLowerCase()}`}>● {p.status}</span>
+                <span className={`sidebar-telemetry-tag ${isLiveSignal ? 'live' : 'offline'}`}>
+                  {isLiveSignal ? '● Live' : '⚠ No Signal'}
+                </span>
+              </div>
+              <div className="patient-card-vitals">
+                ♥ {isLiveSignal && data.hr !== null ? `${data.hr} BPM` : '-- BPM'} &nbsp;&nbsp; ≋ {isLiveSignal && data.gsr !== null ? data.gsr : '--'}
+              </div>
+
               {p.id === selectedPatient && isPanic && !acknowledgedPanic && (
                 <div className="sidebar-panic-indicator">
                   🚨 PANIC ALERT
@@ -216,7 +232,15 @@ export default function DoctorDashboard({ data, chartData }) {
         {selectedPatientData ? (
           <>
             <div className="clinical-header">
-              <h2>Patient: {selectedPatientData.name}</h2>
+              <div>
+                <h2>Patient: {selectedPatientData.name}</h2>
+                <div style={{ marginTop: '0.25rem' }}>
+                  <span className={`telemetry-status-tag ${isLiveSignal ? 'live' : 'offline'}`}>
+                    {isLiveSignal ? <Wifi size={14} /> : <WifiOff size={14} />}
+                    {isLiveSignal ? '● Device Connected • Live Telemetry' : '⚠ Device / Signal Lost • No Live Telemetry'}
+                  </span>
+                </div>
+              </div>
               <div className="clinical-actions">
                 <button className="clinical-btn" onClick={() => setShowHistoryModal(true)}>
                   <FileText size={16} /> View History
@@ -254,8 +278,10 @@ export default function DoctorDashboard({ data, chartData }) {
                   <Heart size={32} />
                 </div>
                 <div className="stat-info">
-                  <span className="stat-label">Heart Rate (Live)</span>
-                  <span className="stat-value">{data.hr} <span style={{fontSize: '1rem', color: 'var(--text-muted)'}}>BPM</span></span>
+                  <span className="stat-label">Heart Rate ({isLiveSignal ? 'Live' : 'No Signal'})</span>
+                  <span className="stat-value">
+                    {isLiveSignal && data.hr !== null ? data.hr : '--'} <span style={{fontSize: '1rem', color: 'var(--text-muted)'}}>BPM</span>
+                  </span>
                   <span className="stat-subtext" style={{fontSize: '0.75rem', color: 'var(--text-muted)'}}>
                     Alert Range: {thresholds.hrMin}–{thresholds.hrMax} BPM
                   </span>
@@ -267,8 +293,10 @@ export default function DoctorDashboard({ data, chartData }) {
                   <Activity size={32} />
                 </div>
                 <div className="stat-info">
-                  <span className="stat-label">Stress Index (Live)</span>
-                  <span className="stat-value">{data.gsr}</span>
+                  <span className="stat-label">Stress Index ({isLiveSignal ? 'Live' : 'No Signal'})</span>
+                  <span className="stat-value">
+                    {isLiveSignal && data.gsr !== null ? data.gsr : '--'}
+                  </span>
                   <span className="stat-subtext" style={{fontSize: '0.75rem', color: 'var(--text-muted)'}}>
                     Alert Threshold: &gt; {thresholds.stressMax}
                   </span>
@@ -280,7 +308,7 @@ export default function DoctorDashboard({ data, chartData }) {
               <div className="chart-header">
                 <div className="chart-title">
                   <ActivitySquare size={20} className={selectedPatientData.status === "Critical" ? 'text-alert' : 'text-accent'} color={selectedPatientData.status === "Critical" ? 'var(--alert)' : 'var(--accent)'} />
-                  Live ECG Waveform - {selectedPatientData.name}
+                  Live ECG Waveform - {selectedPatientData.name} ({isLiveSignal ? 'Streaming' : 'Awaiting Signal'})
                 </div>
               </div>
               <div className="chart-wrapper">
@@ -346,11 +374,11 @@ export default function DoctorDashboard({ data, chartData }) {
               <div className="history-summary-grid">
                 <div className="history-summary-card">
                   <div className="history-card-label">Current HR</div>
-                  <div className="history-card-value">{data.hr ? `${data.hr} BPM` : '--'}</div>
+                  <div className="history-card-value">{isLiveSignal && data.hr ? `${data.hr} BPM` : '--'}</div>
                 </div>
                 <div className="history-summary-card">
                   <div className="history-card-label">Current Stress</div>
-                  <div className="history-card-value">{data.gsr !== null ? data.gsr : '--'}</div>
+                  <div className="history-card-value">{isLiveSignal && data.gsr !== null ? data.gsr : '--'}</div>
                 </div>
                 <div className="history-summary-card">
                   <div className="history-card-label">ECG Samples</div>

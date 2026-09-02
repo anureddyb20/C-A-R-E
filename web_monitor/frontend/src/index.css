@@ -1002,4 +1002,74 @@ body {
   color: #fecdd3;
 }
 
+/* Device & Telemetry Connection Status Badges */
+.telemetry-status-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--surface);
+  border: 1px solid var(--surface-light);
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.telemetry-status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 0.4rem 0.85rem;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+}
+
+.telemetry-status-tag.live {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.telemetry-status-tag.offline {
+  background-color: rgba(225, 29, 72, 0.15);
+  color: #fda4af;
+  border: 1px solid rgba(225, 29, 72, 0.3);
+}
+
+.patient-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.35rem;
+  margin-bottom: 0.35rem;
+}
+
+.sidebar-telemetry-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+}
+
+.sidebar-telemetry-tag.live {
+  background-color: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.sidebar-telemetry-tag.offline {
+  background-color: rgba(225, 29, 72, 0.2);
+  color: #fda4af;
+}
+
+.patient-card-vitals {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+
 

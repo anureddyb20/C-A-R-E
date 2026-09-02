@@ -23,7 +23,15 @@ function DashboardRouter({ auth, setAuth }) {
       />
       
       {auth.role === 'Admin' && <AdminDashboard isConnected={isConnected} />}
-      {auth.role === 'Doctor' && <DoctorDashboard data={data} chartData={chartData} />}
+      {auth.role === 'Doctor' && (
+        <DoctorDashboard 
+          data={data} 
+          chartData={chartData} 
+          isConnected={isConnected}
+          connectionStatus={connectionStatus}
+          hasReceivedData={hasReceivedData}
+        />
+      )}
       {(auth.role === 'User' || !['Admin', 'Doctor'].includes(auth.role)) && (
         <UserDashboard 
           data={data} 
