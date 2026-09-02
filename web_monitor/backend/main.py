@@ -45,7 +45,7 @@ SERIAL_PORT = 'COM3'
 BAUD_RATE = 115200
 
 # Auth Configuration
-SECRET_KEY = "super_secret_care_key"
+SECRET_KEY = "super_secret_care_key_telemetry_system_32bytes"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 1440
 
