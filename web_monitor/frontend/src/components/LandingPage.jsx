@@ -25,39 +25,39 @@ export default function LandingPage() {
       <section className="hero-section">
         <div className="hero-container">
           <div className="hero-content">
-            <span className="preview-badge">Portail Officiel & Télémesure</span>
-            <h1>Livre Blanc sur l'Avenir des Cliniques et de la Télésurveillance</h1>
+            <span className="preview-badge">Official Portal & Telemetry</span>
+            <h1>Whitepaper on the Future of Clinical Telemetry & Remote Monitoring</h1>
             <p>
-              Offrez des solutions de suivi télémétrique en temps réel, de monitoring des constantes vitales et de gestion des alertes médicales pour vos patients.
+              Deliver real-time telemetry tracking, vital sign monitoring, ECG waveform streaming, and automated emergency alert dispatch for healthcare professionals.
             </p>
             <div className="hero-actions">
               <button onClick={() => navigate('/login')} className="btn-pill btn-pill-white">
-                Accéder au portail <ArrowRight size={18} />
+                Access Portal <ArrowRight size={18} />
               </button>
               <a href="#about" className="btn-pill btn-pill-white-outline">
-                En savoir plus
+                Learn More
               </a>
             </div>
           </div>
 
           <div className="hero-preview-card">
-            <span className="preview-badge">Plateforme Intelligente C.A.R.E.</span>
-            <h3 className="preview-title">Tableau de Bord & Monitoring</h3>
+            <span className="preview-badge">C.A.R.E. Intelligent Platform</span>
+            <h3 className="preview-title">Clinical Telemetry & Dashboard</h3>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-              Surveillance continue de l'ECG, du rythme cardiaque (HR), du niveau de stress (GSR) et dispatching d'urgence instantané.
+              Continuous monitoring of ECG waveforms, Heart Rate (HR), Stress Index (GSR), and real-time panic alert notifications.
             </p>
             <div className="preview-stats-grid">
               <div>
                 <div className="preview-stat-number">600+</div>
-                <div className="preview-stat-label">Cliniques & Membres</div>
+                <div className="preview-stat-label">Partner Clinics</div>
               </div>
               <div>
                 <div className="preview-stat-number">99.9%</div>
-                <div className="preview-stat-label">Disponibilité API</div>
+                <div className="preview-stat-label">API Uptime</div>
               </div>
               <div>
                 <div className="preview-stat-number">&lt; 50ms</div>
-                <div className="preview-stat-label">Latence Télémesure</div>
+                <div className="preview-stat-label">Telemetry Latency</div>
               </div>
             </div>
           </div>
@@ -69,31 +69,31 @@ export default function LandingPage() {
         <div className="section-container">
           <div className="about-grid">
             <div className="about-text">
-              <div className="section-tag">À PROPOS DE C.A.R.E.</div>
-              <h2 className="section-heading">Une vision moderne de la santé connectée</h2>
+              <div className="section-tag">ABOUT C.A.R.E.</div>
+              <h2 className="section-heading">A Modern Vision for Connected Healthcare</h2>
               <p>
-                La plateforme C.A.R.E. accompagne les praticiens, hôpitaux et cliniques spécialisées dans la numérisation et la sécurisation des flux de données médicales en temps réel.
+                The C.A.R.E. platform empowers practitioners, hospitals, and specialized clinics with secure, real-time medical data streams and telemetry infrastructure.
               </p>
               <p>
-                Grâce à notre infrastructure certifiée, bénéficiez d'une interconnexion fluide entre les objets connectés (wearables, moniteurs ECG), le personnel soignant et les tableaux de bord décisionnels.
+                Our certified infrastructure provides seamless interconnections between wearable physiological sensors, care teams, and decision-support dashboards.
               </p>
               <div style={{ marginTop: '1.5rem' }}>
                 <button onClick={() => navigate('/login')} className="btn-pill btn-pill-navy">
-                  Rejoindre le réseau
+                  Join the Network
                 </button>
               </div>
             </div>
 
             <div className="about-card">
-              <div className="preview-badge">DOCUMENTATION & RECHERCHE</div>
+              <div className="preview-badge">DOCUMENTATION & RESEARCH</div>
               <h3 style={{ fontSize: '1.3rem', fontWeight: 700, color: 'var(--primary)', marginBottom: '0.75rem' }}>
-                Livre Blanc sur la Télémesure Clinique
+                Clinical Telemetry Whitepaper
               </h3>
               <p style={{ fontSize: '0.92rem', color: 'var(--text-main)', lineHeight: 1.6, marginBottom: '1.25rem' }}>
-                Un guide complet compilant les normes de sécurité, la configuration des seuils physiologiques et le dispatching des alertes d'urgence en milieu hospitalier.
+                A comprehensive guide outlining security standards, physiological threshold configurations, and emergency alert dispatch protocols for clinical settings.
               </p>
               <button onClick={() => navigate('/login')} className="btn-pill btn-pill-outline" style={{ fontSize: '0.85rem' }}>
-                Télécharger le document PDF
+                Download Whitepaper (PDF)
               </button>
             </div>
           </div>
@@ -103,12 +103,12 @@ export default function LandingPage() {
       {/* 3. FULL-WIDTH DEEP NAVY BANNER */}
       <section className="navy-banner">
         <div className="navy-banner-content">
-          <h2>Rejoignez un réseau de plus de 600 professionnels de santé</h2>
+          <h2>Join a Network of 600+ Healthcare Professionals</h2>
           <p style={{ opacity: 0.9, fontSize: '1.05rem', marginBottom: '1.75rem' }}>
-            Participez aux consultations, accédez aux outils de suivi télémétrique et bénéficiez d'un accompagnement personnalisé.
+            Collaborate with fellow clinicians, configure real-time threshold alerts, and access advanced telemetry tools.
           </p>
           <button onClick={() => navigate('/login')} className="btn-pill btn-pill-white">
-            Devenir membre ou partenaire
+            Become a Member or Partner
           </button>
         </div>
       </section>
@@ -117,8 +117,8 @@ export default function LandingPage() {
       <section className="features-section">
         <div className="section-container">
           <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto' }}>
-            <div className="section-tag">POURQUOI REJOINDRE C.A.R.E. ?</div>
-            <h2 className="section-heading">Des outils conçus pour vos besoins cliniques</h2>
+            <div className="section-tag">WHY CHOOSE C.A.R.E.?</div>
+            <h2 className="section-heading">Built for Your Clinical Needs</h2>
           </div>
 
           <div className="features-grid">
@@ -126,9 +126,9 @@ export default function LandingPage() {
               <div className="feature-icon-circle">
                 <MessageSquare size={28} />
               </div>
-              <h3>Échangez avec vos confrères</h3>
+              <h3>Connect with Colleagues</h3>
               <p>
-                Communiquez en direct avec vos collègues praticiens et experts en télémesure pour un suivi interdisciplinaire optimal.
+                Directly communicate with fellow practitioners and telemetry specialists for optimal interdisciplinary patient care.
               </p>
             </div>
 
@@ -136,9 +136,9 @@ export default function LandingPage() {
               <div className="feature-icon-circle">
                 <CheckCircle2 size={28} />
               </div>
-              <h3>Participez aux consultations</h3>
+              <h3>Clinical Consultations</h3>
               <p>
-                Donnez votre avis sur l'évolution des protocoles cliniques et la configuration des seuils de vigilance médicale.
+                Share insights on clinical protocol advancements and customize patient vigilance thresholds in real time.
               </p>
             </div>
 
@@ -146,9 +146,9 @@ export default function LandingPage() {
               <div className="feature-icon-circle">
                 <Award size={28} />
               </div>
-              <h3>Bénéfices & Avantages</h3>
+              <h3>Exclusive Benefits</h3>
               <p>
-                Profitez d'une gamme complète d'outils de monitoring, de tableaux de bord personnalisés et de rapports automatisés.
+                Access a full suite of monitoring tools, personalized dashboards, and automated physiological alert reports.
               </p>
             </div>
           </div>
@@ -156,21 +156,21 @@ export default function LandingPage() {
       </section>
 
       {/* 5. SERVICES & MEMBER BENEFITS GRID (2-COLUMN) */}
-      <section className="benefits-section">
+      <section id="services" className="benefits-section">
         <div className="section-container">
-          <div className="section-tag">BÉNÉFICES AUX MEMBRES</div>
-          <h2 className="section-heading">Profitez de services exclusifs et adaptés</h2>
+          <div className="section-tag">MEMBER BENEFITS & SERVICES</div>
+          <h2 className="section-heading">Access Tailored Clinical Solutions</h2>
 
           <div className="benefits-grid">
             <div className="benefit-card">
               <div className="benefit-badge">Alfred</div>
               <div className="benefit-body">
-                <h3>Capteurs Médicaux & Télémesure</h3>
+                <h3>Medical Sensors & Telemetry</h3>
                 <p>
-                  Module d'acquisition de données physiologiques (ECG, Fréquence Cardiaque, Réponse Galvanique de la Peau).
+                  High-frequency data acquisition module for ECG, Heart Rate (HR), and Galvanic Skin Response (GSR).
                 </p>
                 <button onClick={() => navigate('/login')} className="btn-pill btn-pill-outline" style={{ fontSize: '0.8rem', padding: '0.4rem 1.1rem' }}>
-                  En savoir plus
+                  Learn More
                 </button>
               </div>
             </div>
@@ -178,12 +178,12 @@ export default function LandingPage() {
             <div className="benefit-card">
               <div className="benefit-badge">Cyber</div>
               <div className="benefit-body">
-                <h3>Sécurité & Confidentialité</h3>
+                <h3>Security & Privacy Compliance</h3>
                 <p>
-                  Chiffrement de bout en bout conforme aux normes HDS, HIPAA et RGPD pour les données de santé.
+                  End-to-end encryption compliant with HIPAA, HDS, and GDPR standards for patient data protection.
                 </p>
                 <button onClick={() => navigate('/login')} className="btn-pill btn-pill-outline" style={{ fontSize: '0.8rem', padding: '0.4rem 1.1rem' }}>
-                  En savoir plus
+                  Learn More
                 </button>
               </div>
             </div>
@@ -191,12 +191,12 @@ export default function LandingPage() {
             <div className="benefit-card">
               <div className="benefit-badge">Logic</div>
               <div className="benefit-body">
-                <h3>Logiciel de Gestion Téléphonique & Alerte</h3>
+                <h3>Alert Management & Dispatch</h3>
                 <p>
-                  Interface de suivi des alertes panique et configuration des seuils d'intervention prioritaires.
+                  Intuitive interface for managing panic alerts, patient thresholds, and emergency call routing.
                 </p>
                 <button onClick={() => navigate('/login')} className="btn-pill btn-pill-outline" style={{ fontSize: '0.8rem', padding: '0.4rem 1.1rem' }}>
-                  En savoir plus
+                  Learn More
                 </button>
               </div>
             </div>
@@ -204,12 +204,12 @@ export default function LandingPage() {
             <div className="benefit-card">
               <div className="benefit-badge">UI/UX</div>
               <div className="benefit-body">
-                <h3>Branding & Design Ergonomique</h3>
+                <h3>Ergonomic Clinical Design</h3>
                 <p>
-                  Interfaces modernes adaptées au confort des soignants et à la lisibilité en situation de crise.
+                  Modern interfaces engineered for clinical readability and rapid decision-making in critical scenarios.
                 </p>
                 <button onClick={() => navigate('/login')} className="btn-pill btn-pill-outline" style={{ fontSize: '0.8rem', padding: '0.4rem 1.1rem' }}>
-                  En savoir plus
+                  Learn More
                 </button>
               </div>
             </div>
@@ -217,55 +217,55 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* 6. LATEST NEWS / UPDATES SECTION ("Derniers Communiqués") */}
-      <section className="news-section">
+      {/* 6. LATEST NEWS / UPDATES SECTION */}
+      <section id="news" className="news-section">
         <div className="section-container">
-          <div className="section-tag">ACTUALITÉS & MÉDIA</div>
-          <h2 className="section-heading" style={{ color: 'var(--primary)' }}>Derniers Communiqués</h2>
+          <div className="section-tag">NEWS & ANNOUNCEMENTS</div>
+          <h2 className="section-heading" style={{ color: 'var(--primary)' }}>Latest Updates</h2>
 
           <div className="news-grid">
             <div className="news-card">
               <div>
                 <div className="news-date">
-                  <FileText size={14} /> 02 Septembre 2026
+                  <FileText size={14} /> September 02, 2026
                 </div>
-                <h3>L'avenir de la télémesure clinique au Québec</h3>
+                <h3>The Future of Clinical Telemetry Report</h3>
                 <p>
-                  Publication officielle du rapport d'analyse des besoins technologiques pour les cliniques médicales.
+                  Official release of technology assessment and clinical telemetry integration guidelines.
                 </p>
               </div>
               <a href="#about" style={{ color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                Lire la suite <ChevronRight size={16} />
+                Read Article <ChevronRight size={16} />
               </a>
             </div>
 
             <div className="news-card">
               <div>
                 <div className="news-date">
-                  <FileText size={14} /> 28 Août 2026
+                  <FileText size={14} /> August 28, 2026
                 </div>
-                <h3>Mise à jour v2.4 de la plateforme C.A.R.E.</h3>
+                <h3>C.A.R.E. Platform v2.4 Release</h3>
                 <p>
-                  Intégration du décodage en temps réel des signaux ECG et amélioration du dispatching d'alerte.
+                  Real-time ECG signal decoding and enhanced panic alert dispatch workflow.
                 </p>
               </div>
               <a href="#about" style={{ color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                Lire la suite <ChevronRight size={16} />
+                Read Article <ChevronRight size={16} />
               </a>
             </div>
 
             <div className="news-card">
               <div>
                 <div className="news-date">
-                  <FileText size={14} /> 15 Août 2026
+                  <FileText size={14} /> August 15, 2026
                 </div>
-                <h3>Appel à la mobilisation pour la santé préventive</h3>
+                <h3>Preventive Healthcare Initiative</h3>
                 <p>
-                  Rejoignez les ateliers de concertation pour façonner les fonctionnalités de la prochaine version.
+                  Join collaborative workshops to shape upcoming telemetry monitoring features.
                 </p>
               </div>
               <a href="#about" style={{ color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                Lire la suite <ChevronRight size={16} />
+                Read Article <ChevronRight size={16} />
               </a>
             </div>
           </div>
@@ -281,56 +281,56 @@ export default function LandingPage() {
               <span>C.A.R.E. Network</span>
             </div>
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: '320px' }}>
-              Réseau de télémesure médicale et plateforme intelligente de suivi des constantes vitales en temps réel.
+              Medical telemetry network and intelligent platform for real-time vital sign monitoring and alert dispatch.
             </p>
           </div>
 
           <div className="footer-col">
             <h4>Navigation</h4>
             <ul className="footer-links">
-              <li><a href="#about">À propos</a></li>
+              <li><a href="#about">About Us</a></li>
               <li><a href="#services">Services</a></li>
-              <li><a href="#features">Fonctionnalités</a></li>
-              <li><a href="#news">Communiqués</a></li>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#news">Updates</a></li>
             </ul>
           </div>
 
           <div className="footer-col">
-            <h4>Portail</h4>
+            <h4>Portal Access</h4>
             <ul className="footer-links">
-              <li><a onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>Espace Doctorat</a></li>
-              <li><a onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>Suivi Patient</a></li>
+              <li><a onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>Doctor Dashboard</a></li>
+              <li><a onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>Patient View</a></li>
               <li><a onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>Administration</a></li>
-              <li><a onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>Connexion API</a></li>
+              <li><a onClick={() => navigate('/login')} style={{ cursor: 'pointer' }}>API Gateway</a></li>
             </ul>
           </div>
 
           <div className="footer-col">
-            <h4>Abonnez-vous à l'infolettre</h4>
+            <h4>Subscribe to Newsletter</h4>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
-              Recevez les dernières actualités médicales et mises à jour du système.
+              Receive the latest clinical research and system updates.
             </p>
             <form onSubmit={handleSubscribe} className="newsletter-form">
               <input 
                 type="email" 
-                placeholder="Votre adresse courriel" 
+                placeholder="Enter your email address" 
                 className="newsletter-input"
                 value={emailInput}
                 onChange={(e) => setEmailInput(e.target.value)}
                 required
               />
               <button type="submit" className="btn-pill btn-pill-navy" style={{ padding: '0.55rem 1.2rem', fontSize: '0.85rem' }}>
-                {subscribed ? 'Inscrit avec succès !' : "S'abonner"}
+                {subscribed ? 'Subscribed Successfully!' : 'Subscribe'}
               </button>
             </form>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <div>© 2026 C.A.R.E. Healthcare Monitoring Network. Tous droits réservés.</div>
+          <div>© 2026 C.A.R.E. Healthcare Monitoring Network. All rights reserved.</div>
           <div style={{ display: 'flex', gap: '1.5rem' }}>
-            <a href="#privacy" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Politique de confidentialité</a>
-            <a href="#terms" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Conditions d'utilisation</a>
+            <a href="#privacy" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Privacy Policy</a>
+            <a href="#terms" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Terms of Service</a>
           </div>
         </div>
       </footer>
