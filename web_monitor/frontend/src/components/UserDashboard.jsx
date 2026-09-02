@@ -381,7 +381,7 @@ export default function UserDashboard({
           {chartData.length > 0 && isLive ? (
             <ResponsiveContainer width="100%" height={320}>
               <LineChart data={chartData} margin={{ top: 10, right: 10, bottom: 5, left: -20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.08)" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
                 <XAxis dataKey="time" hide={true} />
                 <YAxis 
                   domain={['auto', 'auto']} 
@@ -391,8 +391,8 @@ export default function UserDashboard({
                 <Line 
                   type="monotone" 
                   dataKey="ecg" 
-                  stroke={isPanic ? 'var(--alert)' : 'var(--accent)'} 
-                  strokeWidth={2.5}
+                  stroke={isPanic ? '#E11D48' : '#0EA5E9'} 
+                  strokeWidth={3}
                   dot={false}
                   isAnimationActive={false} 
                 />

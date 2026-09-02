@@ -308,7 +308,7 @@ export default function DoctorDashboard({
               <div className="chart-wrapper">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
                     <XAxis dataKey="time" hide={true} />
                     <YAxis domain={['auto', 'auto']} stroke="var(--text-muted)" tick={{fill: 'var(--text-muted)'}} />
                     <Line 
@@ -393,7 +393,7 @@ export default function DoctorDashboard({
               <div className="history-chart-wrapper">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
                     <XAxis dataKey="time" hide={true} />
                     <YAxis domain={['auto', 'auto']} stroke="var(--text-muted)" tick={{fill: 'var(--text-muted)'}} />
                     <Line type="monotone" dataKey="ecg" stroke="var(--accent)" strokeWidth={2} dot={false} isAnimationActive={false} />
