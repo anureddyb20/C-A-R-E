@@ -194,8 +194,11 @@ async def serial_reader():
                     await manager.broadcast(json.dumps(data))
                 except json.JSONDecodeError:
                     pass
+            else:
+                data = get_mock_data(start_time)
+                await manager.broadcast(json.dumps(data))
             await asyncio.sleep(0.01)
-    except serial.SerialException:
+    except Exception:
         print(f"Could not open {SERIAL_PORT}. Using mock data generator.")
         while True:
             data = get_mock_data(start_time)
