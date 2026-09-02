@@ -15,6 +15,9 @@ export default function DoctorDashboard({ data, chartData }) {
   const [showHistoryModal, setShowHistoryModal] = useState(false);
   const [showThresholdsModal, setShowThresholdsModal] = useState(false);
 
+  // Panic Acknowledgment State
+  const [acknowledgedPanic, setAcknowledgedPanic] = useState(false);
+
   // Alert Thresholds State (Session Persisted)
   const [thresholds, setThresholds] = useState({
     hrMin: 50,
@@ -31,6 +34,13 @@ export default function DoctorDashboard({ data, chartData }) {
   useEffect(() => {
     fetchPatients();
   }, []);
+
+  // Reset panic acknowledgment when panic signal resolves
+  useEffect(() => {
+    if (data.panic === 0 && acknowledgedPanic) {
+      setAcknowledgedPanic(false);
+    }
+  }, [data.panic, acknowledgedPanic]);
 
   // Update session history log when telemetry arrives
   useEffect(() => {
@@ -113,6 +123,11 @@ export default function DoctorDashboard({ data, chartData }) {
     setTimeout(() => setToast(null), 3000);
   };
 
+  const handleAcknowledgeAlert = () => {
+    setAcknowledgedPanic(true);
+    showToast("Panic alert acknowledged.");
+  };
+
   const isPanic = data.panic === 1;
   const isHrAlert = data.hr !== null && (data.hr < thresholds.hrMin || data.hr > thresholds.hrMax);
   const isStressAlert = data.gsr !== null && data.gsr > thresholds.stressMax;
@@ -147,11 +162,19 @@ export default function DoctorDashboard({ data, chartData }) {
           {displayPatients.map(p => (
             <li 
               key={p.id} 
-              className={`patient-item ${selectedPatient === p.id ? 'active' : ''}`}
+              className={`patient-item ${selectedPatient === p.id ? 'active' : ''} ${p.id === selectedPatient && isPanic && !acknowledgedPanic ? 'panic-active' : ''}`}
               onClick={() => setSelectedPatient(p.id)}
             >
               <div className="patient-name">{p.name} <span className="patient-room">Rm {p.room}</span></div>
               <div className={`patient-status ${p.status.toLowerCase()}`}>{p.status}</div>
+              {p.id === selectedPatient && isPanic && !acknowledgedPanic && (
+                <div className="sidebar-panic-indicator">
+                  🚨 PANIC ALERT
+                  <div className="sidebar-panic-vitals">
+                    ♥ {data.hr !== null ? `${data.hr} BPM` : '--'} &nbsp; ≋ {data.gsr !== null ? data.gsr : '--'}
+                  </div>
+                </div>
+              )}
             </li>
           ))}
         </ul>
@@ -204,10 +227,24 @@ export default function DoctorDashboard({ data, chartData }) {
               </div>
             </div>
 
-            {selectedPatientData.status === "Critical" && (
-              <div className="panic-banner">
-                <AlertTriangle size={32} style={{ display: 'inline', marginRight: '10px', verticalAlign: 'middle' }} />
-                EMERGENCY: ALERT OR PANIC THRESHOLD TRIGGERED
+            {/* PANIC ALERT BANNER */}
+            {isPanic && !acknowledgedPanic && (
+              <div className="doctor-panic-alert-card" role="alert" aria-live="assertive">
+                <div className="doctor-panic-alert-header">
+                  <AlertTriangle size={36} className="panic-icon" />
+                  <div>
+                    <div className="doctor-panic-title">🚨 PANIC ALERT</div>
+                    <div className="doctor-panic-details">
+                      Patient: {selectedPatientData.name} &nbsp;|&nbsp; Room: {selectedPatientData.room}
+                    </div>
+                  </div>
+                </div>
+                <div className="doctor-panic-message">
+                  Panic button activated. Immediate attention required.
+                </div>
+                <button className="acknowledge-btn" onClick={handleAcknowledgeAlert}>
+                  [ ACKNOWLEDGE ALERT ]
+                </button>
               </div>
             )}
 

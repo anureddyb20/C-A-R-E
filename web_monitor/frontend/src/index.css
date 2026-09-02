@@ -919,3 +919,87 @@ body {
   margin-top: 0.5rem;
 }
 
+/* Doctor Dashboard Panic Alert Card & Sidebar Indicator */
+.doctor-panic-alert-card {
+  background: linear-gradient(135deg, #e11d48, #881337);
+  color: white;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  border: 2px solid #fda4af;
+  box-shadow: 0 0 25px rgba(225, 29, 72, 0.6);
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  animation: panicPulse 1.2s infinite alternate ease-in-out;
+}
+
+.doctor-panic-alert-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.doctor-panic-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.doctor-panic-details {
+  font-size: 1rem;
+  opacity: 0.95;
+  margin-top: 0.15rem;
+}
+
+.doctor-panic-message {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  font-weight: 500;
+}
+
+.acknowledge-btn {
+  align-self: flex-start;
+  background-color: white;
+  color: #881337;
+  border: none;
+  padding: 0.6rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  margin-top: 0.25rem;
+}
+
+.acknowledge-btn:hover {
+  background-color: #ffe4e6;
+  transform: translateY(-1px);
+}
+
+.patient-item.panic-active {
+  border: 2px solid #e11d48 !important;
+  background-color: rgba(225, 29, 72, 0.15) !important;
+}
+
+.sidebar-panic-indicator {
+  margin-top: 0.5rem;
+  background-color: rgba(225, 29, 72, 0.3);
+  border: 1px solid rgba(225, 29, 72, 0.5);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffe4e6;
+}
+
+.sidebar-panic-vitals {
+  font-size: 0.7rem;
+  font-weight: 500;
+  margin-top: 0.2rem;
+  color: #fecdd3;
+}
+
+
