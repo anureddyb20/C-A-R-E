@@ -1,9 +1,12 @@
+import os
 import asyncio
 import json
 import math
 import time
 import serial
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Depends, HTTPException, status
+from fastapi.responses import RedirectResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt
@@ -29,14 +32,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.get("/")
-async def root():
+@app.get("/api-status")
+async def api_status():
     return {
         "status": "online",
         "service": "C.A.R.E. Healthcare Telemetry API",
-        "frontend_url": "http://localhost:5173",
         "docs_url": "http://localhost:8000/docs",
-        "message": "C.A.R.E. Backend is running! Open http://localhost:5173 in your browser to view the web dashboard."
     }
 
 # Configuration
@@ -210,6 +211,14 @@ async def websocket_endpoint(websocket: WebSocket):
             await websocket.receive_text()
     except WebSocketDisconnect:
         manager.disconnect(websocket)
+
+frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
+if os.path.exists(frontend_dist):
+    app.mount("/", StaticFiles(directory=frontend_dist, html=True), name="static")
+else:
+    @app.get("/")
+    async def root():
+        return RedirectResponse(url="http://localhost:5173")
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
