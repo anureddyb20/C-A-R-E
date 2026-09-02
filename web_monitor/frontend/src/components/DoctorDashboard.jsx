@@ -534,134 +534,136 @@ export default function DoctorDashboard({
               </div>
             </div>
 
-            {/* PATIENT CARE PLAN MANAGEMENT SECTION */}
-            <section className="care-plan-editor-section">
-              <div className="care-plan-header">
-                <div className="care-plan-title">
+            {/* A. PRESCRIPTIONS CARD */}
+            <section className="care-section-card">
+              <div className="care-section-header">
+                <div className="care-section-title-group">
                   <Pill size={22} color="var(--primary)" />
-                  <span>Patient Care Plan & Treatment Management</span>
+                  <h3>Prescriptions</h3>
                 </div>
-                <div className="care-plan-last-updated">
-                  Last Updated: <strong>{carePlan.lastUpdated || 'Not updated'}</strong>
-                </div>
-              </div>
-
-              {/* A. PRESCRIPTIONS */}
-              <div className="care-plan-block">
-                <div className="care-plan-block-header">
-                  <h4><Pill size={18} /> Prescriptions</h4>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <span className="care-section-badge">Last Updated: {carePlan.lastUpdated || 'Recently'}</span>
                   <button className="care-plan-action-btn primary" onClick={handleOpenAddRx}>
                     <Plus size={16} /> Add Prescription
                   </button>
                 </div>
-                {carePlan.prescriptions && carePlan.prescriptions.length > 0 ? (
-                  <div className="doc-rx-grid">
-                    {carePlan.prescriptions.map((rx) => (
-                      <div key={rx.id} className="doc-rx-card">
-                        <div className="doc-rx-title-row">
-                          <span className="doc-rx-name">{rx.medicineName || rx.name}</span>
-                          <span className={`doc-rx-badge ${rx.status === 'Active' ? 'active' : 'completed'}`}>
-                            {rx.status || 'Active'}
-                          </span>
-                        </div>
-                        <div className="doc-rx-body">
-                          <div><strong>Dosage:</strong> {rx.dosage || '--'}</div>
-                          <div><strong>Frequency:</strong> {rx.frequency || '--'}</div>
-                          <div><strong>Timing:</strong> {rx.timing || '--'}</div>
-                          <div><strong>Duration:</strong> {rx.duration || '--'}</div>
-                        </div>
-                        <div className="doc-rx-actions">
-                          <button className="doc-btn-sm edit" onClick={() => handleOpenEditRx(rx)}>Edit</button>
-                          <button className="doc-btn-sm danger" onClick={() => handleRemoveRx(rx.id)}>Remove</button>
-                        </div>
+              </div>
+              {carePlan.prescriptions && carePlan.prescriptions.length > 0 ? (
+                <div className="doc-rx-grid">
+                  {carePlan.prescriptions.map((rx) => (
+                    <div key={rx.id} className="doc-rx-card">
+                      <div className="doc-rx-title-row">
+                        <span className="doc-rx-name">{rx.medicineName || rx.name}</span>
+                        <span className={`doc-rx-badge ${rx.status === 'Active' ? 'active' : 'completed'}`}>
+                          {rx.status || 'Active'}
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="care-plan-empty">No active prescriptions for this patient. Click "+ Add Prescription" to prescribe medication.</div>
-                )}
-              </div>
+                      <div className="doc-rx-body">
+                        <div><strong>Dosage:</strong> {rx.dosage || '--'}</div>
+                        <div><strong>Frequency:</strong> {rx.frequency || '--'}</div>
+                        <div><strong>Timing:</strong> {rx.timing || '--'}</div>
+                        <div><strong>Duration:</strong> {rx.duration || '--'}</div>
+                      </div>
+                      <div className="doc-rx-actions">
+                        <button className="doc-btn-sm edit" onClick={() => handleOpenEditRx(rx)}>Edit</button>
+                        <button className="doc-btn-sm danger" onClick={() => handleRemoveRx(rx.id)}>Remove</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="care-plan-empty">No active prescriptions for this patient. Click "+ Add Prescription" to prescribe medication.</div>
+              )}
+            </section>
 
-              {/* B. DIET PLAN */}
-              <div className="care-plan-block">
-                <div className="care-plan-block-header">
-                  <h4><Utensils size={18} /> Daily Diet Plan</h4>
-                  <button className="care-plan-action-btn" onClick={handleOpenEditDiet}>
-                    <Edit3 size={16} /> Edit Diet Plan
-                  </button>
+            {/* B. DIET PLAN CARD */}
+            <section className="care-section-card">
+              <div className="care-section-header">
+                <div className="care-section-title-group">
+                  <Utensils size={22} color="var(--primary)" />
+                  <h3>Daily Diet Plan</h3>
                 </div>
-                <div className="doc-diet-grid">
-                  <div className="doc-diet-col">
-                    <h5>Breakfast</h5>
-                    <ul>
-                      {carePlan.dietPlan?.breakfast?.length > 0 ? (
-                        carePlan.dietPlan.breakfast.map((item, i) => <li key={i}>{item}</li>)
-                      ) : <li style={{ fontStyle: 'italic', opacity: 0.6 }}>None specified</li>}
-                    </ul>
-                  </div>
-                  <div className="doc-diet-col">
-                    <h5>Lunch</h5>
-                    <ul>
-                      {carePlan.dietPlan?.lunch?.length > 0 ? (
-                        carePlan.dietPlan.lunch.map((item, i) => <li key={i}>{item}</li>)
-                      ) : <li style={{ fontStyle: 'italic', opacity: 0.6 }}>None specified</li>}
-                    </ul>
-                  </div>
-                  <div className="doc-diet-col">
-                    <h5>Evening Snack</h5>
-                    <ul>
-                      {carePlan.dietPlan?.eveningSnack?.length > 0 ? (
-                        carePlan.dietPlan.eveningSnack.map((item, i) => <li key={i}>{item}</li>)
-                      ) : <li style={{ fontStyle: 'italic', opacity: 0.6 }}>None specified</li>}
-                    </ul>
-                  </div>
-                  <div className="doc-diet-col">
-                    <h5>Dinner</h5>
-                    <ul>
-                      {carePlan.dietPlan?.dinner?.length > 0 ? (
-                        carePlan.dietPlan.dinner.map((item, i) => <li key={i}>{item}</li>)
-                      ) : <li style={{ fontStyle: 'italic', opacity: 0.6 }}>None specified</li>}
-                    </ul>
-                  </div>
-                </div>
+                <button className="care-plan-action-btn" onClick={handleOpenEditDiet}>
+                  <Edit3 size={16} /> Edit Diet Plan
+                </button>
               </div>
-
-              {/* C. DOCTOR'S INSTRUCTIONS */}
-              <div className="care-plan-block">
-                <div className="care-plan-block-header">
-                  <h4><FileText size={18} /> Doctor's Instructions</h4>
-                  <button className="care-plan-action-btn primary" onClick={handleOpenAddInstruction}>
-                    <Plus size={16} /> Add Instruction
-                  </button>
-                </div>
-                {carePlan.doctorInstructions && carePlan.doctorInstructions.length > 0 ? (
-                  <ul className="doc-instructions-list">
-                    {carePlan.doctorInstructions.map((inst, index) => (
-                      <li key={index} className="doc-instruction-item">
-                        <span>• {inst}</span>
-                        <div className="doc-rx-actions" style={{ borderTop: 'none', paddingTop: 0 }}>
-                          <button className="doc-btn-sm edit" onClick={() => handleOpenEditInstruction(index, inst)}>Edit</button>
-                          <button className="doc-btn-sm danger" onClick={() => handleRemoveInstruction(index)}>Delete</button>
-                        </div>
-                      </li>
-                    ))}
+              <div className="doc-diet-grid">
+                <div className="doc-diet-col">
+                  <h5>Breakfast</h5>
+                  <ul>
+                    {carePlan.dietPlan?.breakfast?.length > 0 ? (
+                      carePlan.dietPlan.breakfast.map((item, i) => <li key={i}>{item}</li>)
+                    ) : <li style={{ fontStyle: 'italic', opacity: 0.6 }}>None specified</li>}
                   </ul>
-                ) : (
-                  <div className="care-plan-empty">No instructions added yet.</div>
-                )}
+                </div>
+                <div className="doc-diet-col">
+                  <h5>Lunch</h5>
+                  <ul>
+                    {carePlan.dietPlan?.lunch?.length > 0 ? (
+                      carePlan.dietPlan.lunch.map((item, i) => <li key={i}>{item}</li>)
+                    ) : <li style={{ fontStyle: 'italic', opacity: 0.6 }}>None specified</li>}
+                  </ul>
+                </div>
+                <div className="doc-diet-col">
+                  <h5>Evening Snack</h5>
+                  <ul>
+                    {carePlan.dietPlan?.eveningSnack?.length > 0 ? (
+                      carePlan.dietPlan.eveningSnack.map((item, i) => <li key={i}>{item}</li>)
+                    ) : <li style={{ fontStyle: 'italic', opacity: 0.6 }}>None specified</li>}
+                  </ul>
+                </div>
+                <div className="doc-diet-col">
+                  <h5>Dinner</h5>
+                  <ul>
+                    {carePlan.dietPlan?.dinner?.length > 0 ? (
+                      carePlan.dietPlan.dinner.map((item, i) => <li key={i}>{item}</li>)
+                    ) : <li style={{ fontStyle: 'italic', opacity: 0.6 }}>None specified</li>}
+                  </ul>
+                </div>
               </div>
+            </section>
 
-              {/* D. CARE NOTES */}
-              <div className="care-plan-block">
-                <div className="care-plan-block-header">
-                  <h4><Info size={18} /> Care Notes</h4>
-                  <button className="care-plan-action-btn" onClick={handleOpenEditNotes}>
-                    <Edit3 size={16} /> Edit Care Notes
-                  </button>
+            {/* C. DOCTOR'S INSTRUCTIONS CARD */}
+            <section className="care-section-card">
+              <div className="care-section-header">
+                <div className="care-section-title-group">
+                  <FileText size={22} color="var(--primary)" />
+                  <h3>Doctor's Instructions</h3>
                 </div>
-                <div className="doc-notes-box">
-                  {carePlan.careNotes ? `"${carePlan.careNotes}"` : <em>No care notes entered.</em>}
+                <button className="care-plan-action-btn primary" onClick={handleOpenAddInstruction}>
+                  <Plus size={16} /> Add Instruction
+                </button>
+              </div>
+              {carePlan.doctorInstructions && carePlan.doctorInstructions.length > 0 ? (
+                <ul className="doc-instructions-list">
+                  {carePlan.doctorInstructions.map((inst, index) => (
+                    <li key={index} className="doc-instruction-item">
+                      <span>• {inst}</span>
+                      <div className="doc-rx-actions" style={{ borderTop: 'none', paddingTop: 0 }}>
+                        <button className="doc-btn-sm edit" onClick={() => handleOpenEditInstruction(index, inst)}>Edit</button>
+                        <button className="doc-btn-sm danger" onClick={() => handleRemoveInstruction(index)}>Delete</button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="care-plan-empty">No instructions added yet.</div>
+              )}
+            </section>
+
+            {/* D. CARE NOTES CARD */}
+            <section className="care-section-card">
+              <div className="care-section-header">
+                <div className="care-section-title-group">
+                  <Info size={22} color="var(--primary)" />
+                  <h3>Care Notes</h3>
                 </div>
+                <button className="care-plan-action-btn" onClick={handleOpenEditNotes}>
+                  <Edit3 size={16} /> Edit Care Notes
+                </button>
+              </div>
+              <div className="doc-notes-box">
+                {carePlan.careNotes ? `"${carePlan.careNotes}"` : <em>No care notes entered.</em>}
               </div>
             </section>
           </>
