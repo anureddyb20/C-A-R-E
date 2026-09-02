@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ActivitySquare, Lock, User, AlertCircle } from 'lucide-react';
+import { ActivitySquare, Lock, User, AlertCircle, Eye, EyeOff } from 'lucide-react';
 
 export default function Login({ setAuth }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -62,12 +63,21 @@ export default function Login({ setAuth }) {
           <div className="input-group">
             <Lock className="input-icon" size={20} />
             <input 
-              type="password" 
+              type={showPassword ? 'text' : 'password'} 
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              style={{ paddingRight: '2.75rem' }}
             />
+            <button
+              type="button"
+              className="password-toggle-btn"
+              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
           </div>
           <button type="submit" className="login-button">Sign In</button>
         </form>

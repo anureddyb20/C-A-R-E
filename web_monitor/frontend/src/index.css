@@ -551,6 +551,26 @@ body {
   outline: none;
   border-color: var(--accent);
 }
+.password-toggle-btn {
+  position: absolute;
+  right: 0.85rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+.password-toggle-btn:hover {
+  color: var(--primary);
+}
+.password-toggle-btn:active {
+  transform: scale(0.95);
+}
 .login-button {
   background-color: var(--accent);
   color: var(--bg-dark);
