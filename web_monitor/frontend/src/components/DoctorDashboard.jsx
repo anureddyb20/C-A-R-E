@@ -179,16 +179,10 @@ export default function DoctorDashboard({
                   {isLiveSignal ? '● Live' : '⚠ No Signal'}
                 </span>
               </div>
-              <div className="patient-card-vitals">
-                ♥ {isLiveSignal && data.hr !== null ? `${data.hr} BPM` : '-- BPM'} &nbsp;&nbsp; ≋ {isLiveSignal && data.gsr !== null ? data.gsr : '--'}
-              </div>
 
               {p.id === selectedPatient && isPanic && !acknowledgedPanic && (
                 <div className="sidebar-panic-indicator">
                   🚨 PANIC ALERT
-                  <div className="sidebar-panic-vitals">
-                    ♥ {data.hr !== null ? `${data.hr} BPM` : '--'} &nbsp; ≋ {data.gsr !== null ? data.gsr : '--'}
-                  </div>
                 </div>
               )}
             </li>
