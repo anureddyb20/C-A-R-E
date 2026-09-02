@@ -51,6 +51,11 @@ export default function Login({ setAuth }) {
     navigate('/dashboard');
   };
 
+  const fillDemo = (email) => {
+    setUsername(email);
+    setPassword('password');
+  };
+
   return (
     <div className="login-container">
       <div className="login-card">
@@ -91,13 +96,64 @@ export default function Login({ setAuth }) {
         </form>
 
         <div className="login-hint">
-          <strong>Demo Accounts:</strong><br/>
-          • John Doe (User): <code>user@care.com</code><br/>
-          • Jane Smith (User): <code>jane@care.com</code><br/>
-          • Robert Johnson (User): <code>robert@care.com</code><br/>
-          • Doctor: <code>doctor@care.com</code><br/>
-          • Admin: <code>admin@care.com</code><br/>
-          <span style={{fontSize: '0.8rem', opacity: 0.85}}>(Password: password)</span>
+          <strong>Demo Credentials:</strong>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', alignItems: 'center', marginTop: '8px' }}>
+            <button 
+              type="button" 
+              onClick={() => fillDemo('user@care.com')}
+              style={{
+                width: '100%',
+                maxWidth: '220px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '6px',
+                padding: '6px 12px',
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                color: 'inherit',
+                textAlign: 'center'
+              }}
+            >
+              User: user@care.com
+            </button>
+            <button 
+              type="button" 
+              onClick={() => fillDemo('doctor@care.com')}
+              style={{
+                width: '100%',
+                maxWidth: '220px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '6px',
+                padding: '6px 12px',
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                color: 'inherit',
+                textAlign: 'center'
+              }}
+            >
+              Doctor: doctor@care.com
+            </button>
+            <button 
+              type="button" 
+              onClick={() => fillDemo('admin@care.com')}
+              style={{
+                width: '100%',
+                maxWidth: '220px',
+                background: 'rgba(255, 255, 255, 0.08)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                borderRadius: '6px',
+                padding: '6px 12px',
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                color: 'inherit',
+                textAlign: 'center'
+              }}
+            >
+              Admin: admin@care.com
+            </button>
+          </div>
+          <span style={{ fontSize: '0.78rem', opacity: 0.8, marginTop: '8px', display: 'block' }}>(Password: password)</span>
         </div>
       </div>
     </div>
