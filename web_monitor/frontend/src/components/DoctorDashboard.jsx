@@ -1230,7 +1230,9 @@ export default function DoctorDashboard({
             </div>
 
             <div className="modal-footer">
-              <button className="modal-btn-close" onClick={() => setShowHistoryModal(false)}>Close</button>
+              <button className="modal-btn-close" onClick={() => setShowHistoryModal(false)}>
+                <X size={16} /> Close Window
+              </button>
             </div>
           </div>
         </div>
@@ -1242,7 +1244,7 @@ export default function DoctorDashboard({
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <div className="modal-title">
-                <Sliders size={22} color="var(--accent)" />
+                <Sliders size={22} color="#0ea5e9" />
                 <span>Adjust Physiological Alert Thresholds</span>
               </div>
               <button className="modal-close-btn" onClick={() => setShowThresholdsModal(false)}>
@@ -1253,77 +1255,136 @@ export default function DoctorDashboard({
             <form onSubmit={handleSaveThresholds}>
               <div className="modal-body">
                 <p className="modal-description">
-                  Customize alert trigger limits for <strong>{selectedPatientData ? selectedPatientData.name : 'Patient'}</strong>. Readings outside these parameters will generate visual warnings.
+                  Customize real-time telemetry trigger limits for <strong>{selectedPatientData ? selectedPatientData.name : 'Patient'}</strong>. Readings outside these parameters will generate caregiver warnings.
                 </p>
 
-                <div className="form-group">
-                  <label className="form-label">Heart Rate Min Threshold (BPM)</label>
-                  <input 
-                    type="number" 
-                    className="form-input" 
-                    value={tempThresholds.hrMin} 
-                    onChange={(e) => setTempThresholds({ ...tempThresholds, hrMin: Number(e.target.value) })}
-                    min="30" 
-                    max="100" 
-                    required 
-                  />
-                  <span className="form-hint">Default: 50 BPM</span>
+                {/* HR MIN THRESHOLD */}
+                <div className="threshold-card">
+                  <div className="threshold-card-header">
+                    <label>Heart Rate Min Threshold</label>
+                    <span className="threshold-value-badge">{tempThresholds.hrMin} BPM</span>
+                  </div>
+                  <div className="threshold-input-wrapper">
+                    <input 
+                      type="range" 
+                      className="threshold-range-slider" 
+                      value={tempThresholds.hrMin} 
+                      onChange={(e) => setTempThresholds({ ...tempThresholds, hrMin: Number(e.target.value) })}
+                      min="30" 
+                      max="100" 
+                    />
+                    <input 
+                      type="number" 
+                      className="threshold-number-input" 
+                      value={tempThresholds.hrMin} 
+                      onChange={(e) => setTempThresholds({ ...tempThresholds, hrMin: Number(e.target.value) })}
+                      min="30" 
+                      max="100" 
+                      required 
+                    />
+                  </div>
+                  <div className="threshold-bounds-hint">
+                    <span>Range: 30 - 100 BPM</span>
+                    <span>Default: 50 BPM</span>
+                  </div>
                 </div>
 
-                <div className="form-group">
-                  <label className="form-label">Heart Rate Max Threshold (BPM)</label>
-                  <input 
-                    type="number" 
-                    className="form-input" 
-                    value={tempThresholds.hrMax} 
-                    onChange={(e) => setTempThresholds({ ...tempThresholds, hrMax: Number(e.target.value) })}
-                    min="80" 
-                    max="200" 
-                    required 
-                  />
-                  <span className="form-hint">Default: 100 BPM</span>
+                {/* HR MAX THRESHOLD */}
+                <div className="threshold-card">
+                  <div className="threshold-card-header">
+                    <label>Heart Rate Max Threshold</label>
+                    <span className="threshold-value-badge">{tempThresholds.hrMax} BPM</span>
+                  </div>
+                  <div className="threshold-input-wrapper">
+                    <input 
+                      type="range" 
+                      className="threshold-range-slider" 
+                      value={tempThresholds.hrMax} 
+                      onChange={(e) => setTempThresholds({ ...tempThresholds, hrMax: Number(e.target.value) })}
+                      min="80" 
+                      max="200" 
+                    />
+                    <input 
+                      type="number" 
+                      className="threshold-number-input" 
+                      value={tempThresholds.hrMax} 
+                      onChange={(e) => setTempThresholds({ ...tempThresholds, hrMax: Number(e.target.value) })}
+                      min="80" 
+                      max="200" 
+                      required 
+                    />
+                  </div>
+                  <div className="threshold-bounds-hint">
+                    <span>Range: 80 - 200 BPM</span>
+                    <span>Default: 100 BPM</span>
+                  </div>
                 </div>
 
-                <div className="form-group">
-                  <label className="form-label">Stress Index Max Threshold (GSR)</label>
-                  <input 
-                    type="number" 
-                    className="form-input" 
-                    value={tempThresholds.stressMax} 
-                    onChange={(e) => setTempThresholds({ ...tempThresholds, stressMax: Number(e.target.value) })}
-                    min="200"
-                    max="1000"
-                    required
-                  />
-                  <span className="form-hint">Default: 520</span>
+                {/* STRESS INDEX THRESHOLD */}
+                <div className="threshold-card">
+                  <div className="threshold-card-header">
+                    <label>Stress Index Max Threshold (GSR)</label>
+                    <span className="threshold-value-badge">{tempThresholds.stressMax} GSR</span>
+                  </div>
+                  <div className="threshold-input-wrapper">
+                    <input 
+                      type="range" 
+                      className="threshold-range-slider" 
+                      value={tempThresholds.stressMax} 
+                      onChange={(e) => setTempThresholds({ ...tempThresholds, stressMax: Number(e.target.value) })}
+                      min="200" 
+                      max="1000" 
+                    />
+                    <input 
+                      type="number" 
+                      className="threshold-number-input" 
+                      value={tempThresholds.stressMax} 
+                      onChange={(e) => setTempThresholds({ ...tempThresholds, stressMax: Number(e.target.value) })}
+                      min="200" 
+                      max="1000" 
+                      required 
+                    />
+                  </div>
+                  <div className="threshold-bounds-hint">
+                    <span>Range: 200 - 1000 GSR</span>
+                    <span>Default: 520</span>
+                  </div>
                 </div>
 
-                <div className="form-group checkbox-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
-                  <input 
-                    type="checkbox" 
-                    id="panicToggle"
-                    checked={tempThresholds.panicAlertEnabled} 
-                    onChange={(e) => setTempThresholds({ ...tempThresholds, panicAlertEnabled: e.target.checked })} 
-                  />
-                  <label htmlFor="panicToggle" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-main)', cursor: 'pointer' }}>
-                    Enable Panic Hardware Interrupt Banner Alerts
+                {/* PANIC ALERT TOGGLE */}
+                <div className="threshold-card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0' }}>
+                  <div>
+                    <div style={{ fontWeight: 600, color: '#ffffff', fontSize: '0.92rem' }}>Hardware Panic Alerts</div>
+                    <div style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '2px' }}>Enable banner warnings on physical panic button triggers</div>
+                  </div>
+                  <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: '0.6rem' }}>
+                    <input 
+                      type="checkbox" 
+                      checked={tempThresholds.panicAlertEnabled} 
+                      onChange={(e) => setTempThresholds({ ...tempThresholds, panicAlertEnabled: e.target.checked })} 
+                      style={{ width: '18px', height: '18px', accentColor: '#0ea5e9', cursor: 'pointer' }}
+                    />
+                    <span className="threshold-value-badge" style={{ background: tempThresholds.panicAlertEnabled ? 'rgba(16, 185, 129, 0.15)' : 'rgba(148, 163, 184, 0.15)', color: tempThresholds.panicAlertEnabled ? '#10b981' : '#94a3b8', border: tempThresholds.panicAlertEnabled ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(148, 163, 184, 0.3)' }}>
+                      {tempThresholds.panicAlertEnabled ? 'ENABLED' : 'DISABLED'}
+                    </span>
                   </label>
                 </div>
 
+                {/* CLINICAL NOTICE */}
                 <div className="threshold-disclaimer">
-                  <Info size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
+                  <Info size={20} color="#38bdf8" style={{ flexShrink: 0, marginTop: '2px' }} />
                   <div>
-                    <strong>Clinical Notice:</strong> Monitoring thresholds are configurable alerts for telemetry observation and non-diagnostic caregiver notification.
+                    <strong>Clinical Notice:</strong> Monitoring thresholds act as visual & telemetry triggers for observation and non-diagnostic caregiver alerts.
                   </div>
                 </div>
               </div>
 
-              <div className="modal-footer" style={{ padding: 0, border: 'none', backgroundColor: 'transparent', marginTop: '0.5rem' }}>
-                <button type="button" className="btn-cancel" style={{ padding: '0.6rem 1.25rem' }} onClick={() => setShowThresholdsModal(false)}>
+              <div className="modal-footer">
+                <button type="button" className="modal-btn-secondary" onClick={() => setShowThresholdsModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn-save" style={{ padding: '0.6rem 1.25rem', borderRadius: '6px' }}>
-                  Save Thresholds
+                <button type="submit" className="modal-btn-primary">
+                  <CheckCircle size={17} /> Save Thresholds
                 </button>
               </div>
             </form>
