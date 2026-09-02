@@ -29,6 +29,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/")
+async def root():
+    return {
+        "status": "online",
+        "service": "C.A.R.E. Healthcare Telemetry API",
+        "frontend_url": "http://localhost:5173",
+        "docs_url": "http://localhost:8000/docs",
+        "message": "C.A.R.E. Backend is running! Open http://localhost:5173 in your browser to view the web dashboard."
+    }
+
 # Configuration
 SERIAL_PORT = 'COM3'
 BAUD_RATE = 115200
