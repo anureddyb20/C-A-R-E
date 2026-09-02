@@ -10,6 +10,7 @@ import {
   User as UserIcon, 
   CheckCircle, 
   Plus, 
+  Minus, 
   X, 
   Sliders, 
   History, 
@@ -1228,12 +1229,6 @@ export default function DoctorDashboard({
                 </table>
               </div>
             </div>
-
-            <div className="modal-footer">
-              <button className="modal-btn-close" onClick={() => setShowHistoryModal(false)}>
-                <X size={16} /> Close Window
-              </button>
-            </div>
           </div>
         </div>
       )}
@@ -1273,15 +1268,31 @@ export default function DoctorDashboard({
                       min="30" 
                       max="100" 
                     />
-                    <input 
-                      type="number" 
-                      className="threshold-number-input" 
-                      value={tempThresholds.hrMin} 
-                      onChange={(e) => setTempThresholds({ ...tempThresholds, hrMin: Number(e.target.value) })}
-                      min="30" 
-                      max="100" 
-                      required 
-                    />
+                    <div className="custom-stepper">
+                      <button 
+                        type="button" 
+                        className="stepper-btn"
+                        onClick={() => setTempThresholds({ ...tempThresholds, hrMin: Math.max(30, tempThresholds.hrMin - 1) })}
+                      >
+                        <Minus size={14} />
+                      </button>
+                      <input 
+                        type="number" 
+                        className="threshold-number-input" 
+                        value={tempThresholds.hrMin} 
+                        onChange={(e) => setTempThresholds({ ...tempThresholds, hrMin: Number(e.target.value) })}
+                        min="30" 
+                        max="100" 
+                        required 
+                      />
+                      <button 
+                        type="button" 
+                        className="stepper-btn"
+                        onClick={() => setTempThresholds({ ...tempThresholds, hrMin: Math.min(100, tempThresholds.hrMin + 1) })}
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
                   </div>
                   <div className="threshold-bounds-hint">
                     <span>Range: 30 - 100 BPM</span>
@@ -1304,15 +1315,31 @@ export default function DoctorDashboard({
                       min="80" 
                       max="200" 
                     />
-                    <input 
-                      type="number" 
-                      className="threshold-number-input" 
-                      value={tempThresholds.hrMax} 
-                      onChange={(e) => setTempThresholds({ ...tempThresholds, hrMax: Number(e.target.value) })}
-                      min="80" 
-                      max="200" 
-                      required 
-                    />
+                    <div className="custom-stepper">
+                      <button 
+                        type="button" 
+                        className="stepper-btn"
+                        onClick={() => setTempThresholds({ ...tempThresholds, hrMax: Math.max(80, tempThresholds.hrMax - 1) })}
+                      >
+                        <Minus size={14} />
+                      </button>
+                      <input 
+                        type="number" 
+                        className="threshold-number-input" 
+                        value={tempThresholds.hrMax} 
+                        onChange={(e) => setTempThresholds({ ...tempThresholds, hrMax: Number(e.target.value) })}
+                        min="80" 
+                        max="200" 
+                        required 
+                      />
+                      <button 
+                        type="button" 
+                        className="stepper-btn"
+                        onClick={() => setTempThresholds({ ...tempThresholds, hrMax: Math.min(200, tempThresholds.hrMax + 1) })}
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
                   </div>
                   <div className="threshold-bounds-hint">
                     <span>Range: 80 - 200 BPM</span>
@@ -1335,15 +1362,31 @@ export default function DoctorDashboard({
                       min="200" 
                       max="1000" 
                     />
-                    <input 
-                      type="number" 
-                      className="threshold-number-input" 
-                      value={tempThresholds.stressMax} 
-                      onChange={(e) => setTempThresholds({ ...tempThresholds, stressMax: Number(e.target.value) })}
-                      min="200" 
-                      max="1000" 
-                      required 
-                    />
+                    <div className="custom-stepper">
+                      <button 
+                        type="button" 
+                        className="stepper-btn"
+                        onClick={() => setTempThresholds({ ...tempThresholds, stressMax: Math.max(200, tempThresholds.stressMax - 5) })}
+                      >
+                        <Minus size={14} />
+                      </button>
+                      <input 
+                        type="number" 
+                        className="threshold-number-input" 
+                        value={tempThresholds.stressMax} 
+                        onChange={(e) => setTempThresholds({ ...tempThresholds, stressMax: Number(e.target.value) })}
+                        min="200" 
+                        max="1000" 
+                        required 
+                      />
+                      <button 
+                        type="button" 
+                        className="stepper-btn"
+                        onClick={() => setTempThresholds({ ...tempThresholds, stressMax: Math.min(1000, tempThresholds.stressMax + 5) })}
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
                   </div>
                   <div className="threshold-bounds-hint">
                     <span>Range: 200 - 1000 GSR</span>
