@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Therapist Dashboard | C.A.R.E.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>C.A.R.E.</h2>
+            <span class="role-badge" style="background: #EAB308; color: #713F12;">Therapist View</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div style="padding: 0 24px; margin-bottom: 10px; color: #64748B; font-size: 0.8rem; text-transform: uppercase; font-weight: 700;">My Patients</div>
+            <a href="#" class="nav-item active">
+                <div style="width: 8px; height: 8px; background: #10B981; border-radius: 50%;"></div>
+                John Doe
+            </a>
+            <a href="#" class="nav-item">
+                <div style="width: 8px; height: 8px; background: #E11D48; border-radius: 50%; box-shadow: 0 0 10px #E11D48; animation: pulse 2s infinite;"></div>
+                Mary Smith (Alert)
+            </a>
+            <a href="#" class="nav-item">
+                <div style="width: 8px; height: 8px; background: #64748B; border-radius: 50%;"></div>
+                Robert Johnson (Offline)
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" style="color: #FCA5A5;">Logout</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div>
+                <span style="font-weight: 600; color: var(--primary);">Dr. Sarah Jenkins</span>
+                <span style="color: var(--text-muted); margin-left: 10px; font-size: 0.9rem;">Cardiology & Stress Management</span>
+            </div>
+            <div class="status-badge status-safe">Secure Connection (E2EE)</div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="page-header">
+                <div>
+                    <h1 style="display: flex; align-items: center; gap: 15px;">
+                        Patient: John Doe 
+                        <span class="status-badge status-safe" style="font-size: 0.9rem;">Online</span>
+                    </h1>
+                    <p>Age: 68 | Risk Factor: High (Previous MI)</p>
+                </div>
+                <button class="btn btn-outline">Export PDF Report</button>
+            </div>
+
+            <!-- Vitals Grid -->
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-header"><span class="card-title">Heart Rate</span></div>
+                    <div class="stat-value">72 <span class="stat-unit">BPM</span></div>
+                    <p style="color: #10B981; font-weight: 500; font-size: 0.9rem; margin-top: 10px;">Stable</p>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-title">GSR (Stress)</span></div>
+                    <div class="stat-value" style="color: #EAB308;">Elevated</div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;">Spike detected 4m ago</p>
+                </div>
+                <div class="card" style="background: #F8FAFC;">
+                    <div class="card-header"><span class="card-title">Device Status</span></div>
+                    <div style="font-size: 1.1rem; font-weight: 600; margin-bottom: 5px;">Battery: 84%</div>
+                    <div style="font-size: 1.1rem; font-weight: 600;">Signal: Excellent (-45dBm)</div>
+                </div>
+            </div>
+
+            <!-- ECG Live View -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <span class="card-title">Live Telemetry (Lead I ECG)</span>
+                </div>
+                <div style="height: 250px; background: #0F172A; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 20px 20px;">
+                    <!-- CSS Mockup of ECG wave -->
+                    <svg width="100%" height="100%" viewBox="0 0 800 200" preserveAspectRatio="none">
+                        <path d="M0,100 L100,100 L110,80 L120,100 L130,100 L140,110 L150,20 L160,180 L170,100 L180,100 L190,90 L200,100 L300,100 L310,80 L320,100 L330,100 L340,110 L350,20 L360,180 L370,100 L380,100 L390,90 L400,100 L500,100 L510,80 L520,100 L530,100 L540,110 L550,20 L560,180 L570,100 L580,100 L590,90 L600,100 L700,100 L710,80 L720,100 L730,100 L740,110 L750,20 L760,180 L770,100 L780,100 L790,90 L800,100" 
+                              fill="none" stroke="#10B981" stroke-width="3" stroke-linejoin="round" />
+                    </svg>
+                    <!-- Scanning line effect -->
+                    <div style="position: absolute; top: 0; left: 0; height: 100%; width: 4px; background: #fff; box-shadow: 0 0 10px #10B981; animation: scan 3s linear infinite;"></div>
+                </div>
+            </div>
+            
+            <!-- Alert History Table -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Recent Event History</span>
+                </div>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Event Type</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Today, 10:42 AM</td>
+                            <td><span class="status-badge status-warning">Stress Anomaly</span></td>
+                            <td>GSR levels spiked > 40% above baseline.</td>
+                            <td>Resolved</td>
+                        </tr>
+                        <tr>
+                            <td>Yesterday, 8:15 PM</td>
+                            <td><span class="status-badge status-alert">Panic Button</span></td>
+                            <td>Patient manually triggered panic alert.</td>
+                            <td>Called Patient (Safe)</td>
+                        </tr>
+                        <tr>
+                            <td>Jul 08, 2026</td>
+                            <td><span class="status-badge status-safe">Routine Check</span></td>
+                            <td>Nightly ECG telemetry logged normally.</td>
+                            <td>Logged</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<style>
+    @keyframes scan {
+        0% { left: 0; }
+        100% { left: 100%; }
+    }
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 1; }
+        50% { transform: scale(1.5); opacity: 0.5; }
+        100% { transform: scale(1); opacity: 1; }
+    }
+</style>
+
+</body>
+</html>

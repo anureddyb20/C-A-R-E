@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard | C.A.R.E.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>C.A.R.E.</h2>
+            <span class="role-badge" style="background: #3B82F6;">Patient View</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                My Vitals
+            </a>
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                Privacy Settings
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="index.html" style="color: #FCA5A5;">Logout</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="topbar">
+            <div class="status-badge status-safe" id="conn-status">Device Connected</div>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <span style="font-size: 0.9rem; font-weight: 500;">Battery: 84%</span>
+                <div style="width: 30px; height: 15px; border: 2px solid var(--text-muted); border-radius: 4px; padding: 1px;">
+                    <div style="width: 84%; height: 100%; background: #10B981;"></div>
+                </div>
+            </div>
+        </header>
+
+        <div class="dashboard-content">
+            <div class="page-header">
+                <div>
+                    <h1>My Health Overview</h1>
+                    <p>Welcome back. Your vitals are currently stable.</p>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <!-- Heart Rate -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Live Heart Rate</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                    </div>
+                    <div class="stat-value">72 <span class="stat-unit">BPM</span></div>
+                    <p style="color: #10B981; font-weight: 500; font-size: 0.9rem; margin-top: 10px;">Resting heart rate normal</p>
+                </div>
+
+                <!-- Stress Index -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Stress Index (GSR)</span>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-light)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    </div>
+                    <div class="stat-value">Low</div>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 10px;">Skin conductance within baseline</p>
+                </div>
+            </div>
+
+            <!-- ECG Mockup -->
+            <div class="card" style="margin-bottom: 24px;">
+                <div class="card-header">
+                    <span class="card-title">Electrocardiogram (ECG)</span>
+                </div>
+                <div style="height: 200px; background: #0F172A; border-radius: 8px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    <!-- CSS Mockup of ECG wave -->
+                    <svg width="100%" height="100%" viewBox="0 0 800 200" preserveAspectRatio="none">
+                        <path d="M0,100 L100,100 L110,80 L120,100 L130,100 L140,110 L150,20 L160,180 L170,100 L180,100 L190,90 L200,100 L300,100 L310,80 L320,100 L330,100 L340,110 L350,20 L360,180 L370,100 L380,100 L390,90 L400,100 L500,100 L510,80 L520,100 L530,100 L540,110 L550,20 L560,180 L570,100 L580,100 L590,90 L600,100 L700,100 L710,80 L720,100 L730,100 L740,110 L750,20 L760,180 L770,100 L780,100 L790,90 L800,100" 
+                              fill="none" stroke="#14B8A6" stroke-width="3" stroke-linejoin="round" />
+                    </svg>
+                    <!-- Scanning line effect -->
+                    <div style="position: absolute; top: 0; left: 0; height: 100%; width: 4px; background: #fff; box-shadow: 0 0 10px #14B8A6; animation: scan 3s linear infinite;"></div>
+                </div>
+            </div>
+
+            <!-- Privacy Controls -->
+            <div class="card" style="border-left: 4px solid var(--primary);">
+                <div class="card-header">
+                    <span class="card-title" style="color: var(--primary);">Data Privacy Controls</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <p style="font-weight: 600; margin-bottom: 5px;">Share Telemetry with Dr. Sarah Jenkins</p>
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">Disable this to immediately cut off live monitoring access to your assigned therapist.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked id="telemetryToggle" onchange="toggleTelemetry()">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<style>
+    @keyframes scan {
+        0% { left: 0; }
+        100% { left: 100%; }
+    }
+</style>
+
+<script>
+    function toggleTelemetry() {
+        const isSharing = document.getElementById('telemetryToggle').checked;
+        const statusBadge = document.getElementById('conn-status');
+        
+        if (isSharing) {
+            statusBadge.className = 'status-badge status-safe';
+            statusBadge.innerText = 'Transmitting to Therapist';
+        } else {
+            statusBadge.className = 'status-badge status-warning';
+            statusBadge.innerText = 'Telemetry Revoked (Private)';
+            alert('Live data transmission to your therapist has been cut off.');
+        }
+    }
+</script>
+
+</body>
+</html>

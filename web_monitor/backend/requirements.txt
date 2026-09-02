@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+pyserial
+PyJWT
+python-multipart

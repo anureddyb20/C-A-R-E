@@ -1,0 +1,9 @@
+Project: Accessible Wearable Health & Stress Monitor
+
+1. Humanitarian Problem / Local Challenge
+Our project addresses the critical lack of affordable, continuous health monitoring for the elderly, individuals living alone, and patients in low-resource or remote areas. Currently, continuous cardiac and stress monitoring requires expensive, medical-grade equipment or premium smartwatches that cost hundreds of dollars and often mandate monthly subscriptions. Furthermore, these commercial devices frequently rely on complex smartphone applications that are not user-friendly for the elderly demographic. As a result, sudden cardiac events, severe panic attacks, or falls often go unnoticed until it is too late because caregivers or family members are unaware of the emergency occurring in another room or location.
+
+2. Significance of the Problem
+Cardiovascular diseases are the leading cause of mortality globally. In many of these critical situations, response time is the determining factor between life and death. The inability to afford real-time monitoring leaves millions of vulnerable individuals at severe risk. 
+
+By utilizing ultra-low-cost, readily available components (costing approximately ₹1,100), our project democratizes access to life-saving technology. It provides a standalone, continuous monitoring system that requires zero technical literacy from the patient. If an abnormal heart rate is detected, or if the patient triggers the panic button, caregivers receive instant, localized alerts on a dedicated receiver and dashboard. This not only drastically reduces emergency response times but also provides immense psychological relief and peace of mind to both patients and their families, regardless of their economic background.

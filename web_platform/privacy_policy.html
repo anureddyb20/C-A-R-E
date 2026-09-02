@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | C.A.R.E.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="doc-container">
+    <h1>Data Privacy & Security Policy</h1>
+    <p style="color: var(--primary); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Effective Date: July 10, 2026</p>
+    
+    <p>The C.A.R.E. (Continuous Accessible Remote Electrocardiogram) project operates on a fundamental principle: <strong>Patient physiological data is highly sensitive and belongs exclusively to the patient.</strong> This policy outlines our uncompromising approach to data security, HIPAA compliance, and local processing architectures.</p>
+
+    <h2>1. Edge Processing & Local Architecture</h2>
+    <p>Unlike commercial smartwatches that continuously upload biometric telemetry to remote cloud servers for monetization and analysis, the C.A.R.E. ecosystem is designed as an isolated edge network.</p>
+    <ul>
+        <li><strong>Zero Cloud Dependency:</strong> The 2.4GHz RF network linking the Wearable Sentinel to the Edge Gateway operates entirely within the local environment (home or clinic).</li>
+        <li><strong>Volatile Memory:</strong> The gateway processes WebSockets in real-time. Biometric data (Heart Rate, ECG, Stress Index) is stored purely in volatile RAM and is automatically overwritten every few seconds. No long-term historical logs are generated or stored without explicit patient consent.</li>
+    </ul>
+
+    <h2>2. Data Anonymization & Security</h2>
+    <p>For deployment in clinical settings where data must be routed to a centralized Therapist Dashboard via secure intranet or internet protocols:</p>
+    <ul>
+        <li><strong>End-to-End Encryption (E2EE):</strong> All WebSocket transmissions are secured via TLS/SSL (wss://), ensuring telemetry cannot be intercepted during transit.</li>
+        <li><strong>Anonymization:</strong> Device IDs are decoupled from Patient Identifiable Information (PII). The hardware telemetry stream contains only a randomized UUID and the raw integer arrays for the biometric sensors.</li>
+    </ul>
+
+    <h2>3. Patient Consent & Control</h2>
+    <p>The core ethos of C.A.R.E. is empowerment. Within the Patient Dashboard, users possess absolute control over their telemetry stream.</p>
+    <ul>
+        <li><strong>The Kill Switch:</strong> Patients have access to a one-tap software kill switch ("Revoke Telemetry Access") that immediately severs the WebSocket connection to the therapist dashboard.</li>
+        <li><strong>Explicit Consent:</strong> Data is only transmitted when the physical hardware is actively worn and the patient has acknowledged the terms of service.</li>
+    </ul>
+
+    <h2>4. HIPAA & GDPR Alignment</h2>
+    <p>By enforcing local processing, decoupling PII from hardware IDs, and providing immediate revocation rights, the C.A.R.E. software architecture fundamentally aligns with the core tenets of the Health Insurance Portability and Accountability Act (HIPAA) Privacy Rule and the EU General Data Protection Regulation (GDPR).</p>
+
+    <div style="margin-top: 40px; text-align: center;">
+        <button class="btn btn-primary" onclick="window.close()">I Understand - Close Window</button>
+    </div>
+</div>
+
+</body>
+</html>

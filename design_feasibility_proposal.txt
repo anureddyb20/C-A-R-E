@@ -1,0 +1,33 @@
+========================================================================
+DESIGN & FEASIBILITY PROPOSAL
+========================================================================
+Project: Accessible Wearable Health & Stress Monitor
+
+1. INTRODUCTION & OBJECTIVES
+The objective of this project is to develop an ultra-low-cost, continuous wearable health monitor designed for the elderly and at-risk patients in low-resource communities. The system aims to bridge the gap in emergency medical response by providing real-time alerts to caregivers for severe cardiac events and acute physiological stress, without the need for expensive commercial devices or smartphone applications.
+
+2. DESIGN ARCHITECTURE
+The system is divided into two primary nodes communicating via a 2.4GHz RF link:
+- Wearable Transmitter Node: Powered by an STM32F103C8T6 microcontroller, this node interfaces with an AD8232 ECG sensor and a custom Galvanic Skin Response (GSR) sensor. It utilizes an nRF24L01+ transceiver to broadcast biometric data locally with zero latency. A haptic vibration motor provides immediate tactile feedback to the wearer.
+- Stationary Gateway Node: An ESP32 microcontroller receives the RF data and acts as a local server, pushing real-time biometric metrics (Heart Rate, Stress Index, Panic Status) to a caregiver dashboard via WebSockets.
+
+3. FEASIBILITY ANALYSIS
+
+A. Technical Feasibility (High)
+The project relies on proven, off-the-shelf components. The STM32 architecture provides more than enough processing power (72MHz, 12-bit ADC) to perform local peak-detection algorithms for heart rate extraction. Furthermore, the use of standard SPI communication for the nRF24L01+ modules ensures reliable, high-speed telemetry. The software stack utilizes robust, open-source C++ libraries (Arduino Core), minimizing development risk.
+
+B. Economic Feasibility (Extremely High)
+The primary competitive advantage of this project is its cost structure. 
+- STM32 Blue Pill: ~₹150
+- AD8232 ECG Module: ~₹300
+- nRF24L01+ Modules (x2): ~₹150
+- ESP32 Gateway: ~₹300
+- Battery & Peripherals (Motor, TP4056): ~₹200
+Total Estimated Cost: ~₹1,100 (approx. $13 USD). 
+This shatters the economic barriers of commercial monitors, making it highly scalable and affordable for low-income populations and rural healthcare NGOs.
+
+C. Operational Feasibility (High)
+The design specifically targets users with zero technical literacy. Unlike commercial smartwatches that require Bluetooth pairing, app installations, and account registrations, this system operates standalone. The patient simply wears the device; the caregiver opens a local web link. The inclusion of a physical, tactile "Panic Button" ensures that even users experiencing severe motor distress can easily trigger an alarm. 
+
+4. CONCLUSION
+The proposed Wearable Health Monitor is highly feasible across technical, economic, and operational metrics. By utilizing mass-produced, low-cost components to build a localized, reliable telemetry network, the project presents a viable and scalable solution to a critical humanitarian challenge.
