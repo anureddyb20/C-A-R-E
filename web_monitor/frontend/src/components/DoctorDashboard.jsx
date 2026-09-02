@@ -67,7 +67,7 @@ export default function DoctorDashboard({
   const fetchPatients = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/patients', {
+      const response = await fetch('/patients', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -95,7 +95,7 @@ export default function DoctorDashboard({
     if (!newName || !newRoom) return;
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/patients', {
+      const response = await fetch('/patients', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

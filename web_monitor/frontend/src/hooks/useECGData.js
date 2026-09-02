@@ -19,7 +19,10 @@ export function useECGData() {
       setConnectionStatus('connecting');
 
       try {
-        const ws = new WebSocket('ws://localhost:8000/ws');
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const host = window.location.host || 'localhost:8000';
+        const wsUrl = `${protocol}//${host}/ws`;
+        const ws = new WebSocket(wsUrl);
 
         ws.onopen = () => {
           if (!isMounted) return;
